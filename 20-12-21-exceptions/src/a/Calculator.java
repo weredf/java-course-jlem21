@@ -2,13 +2,13 @@ package a;
 
 public class Calculator {
 	
-	public int div(int a, int b) {
+	public int div(int a, int b) throws Exception {
 		if(b != 0) {
 			// return - all is good
 			return a/b;
 		}else {
 			// throw - something went wrong
-			RuntimeException e = new RuntimeException("error");
+			Exception e = new Exception("error");
 			throw e;
 		}
 	}
