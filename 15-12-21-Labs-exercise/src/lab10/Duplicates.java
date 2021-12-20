@@ -10,15 +10,24 @@ public class Duplicates {
 		// locate all unique numbers
 
 		for (int i = 0; i < duplicate.length; i++) {
+			unique[i] = duplicate[i];
 			for (int j = 0; j < duplicate.length; j++) {
-				if (unique[j] != duplicate[i] && j != i) {
-					unique[j] = duplicate[j];
+				if (unique[j] == duplicate[i] && j != i) {
+					unique[i] = 0;
 				}
 			}
-
 		}
 		for (int i = 0; i < unique.length; i++) {
-			System.out.println(unique[i]);
+			System.out.print(unique[i]);
+		}
+		System.out.println();
+		
+		// eliminate 0
+		for (int i = 0; i < unique.length; i++) {
+			while(unique[i]==0) {
+				unique[i]=unique[i++];
+			}
+		System.out.print(unique[i]);		
 		}
 
 	}
