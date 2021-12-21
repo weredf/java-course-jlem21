@@ -1,4 +1,4 @@
-package bank;
+package app.core;
 
 public class Account {
 	

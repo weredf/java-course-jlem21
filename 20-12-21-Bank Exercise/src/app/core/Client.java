@@ -1,13 +1,15 @@
-package bank;
+package app.core;
 
-public class Client {
+import java.lang.reflect.Array;
+
+public abstract class Client {
 
 	private int id;
 	private String name;
 	private float balance;
 	Account[] accounts = new Account[5];
-	private float commissionRate = 0;
-	private float interestRate = 0;
+	protected float commissionRate = 0;
+	protected float interestRate = 0;
 	Logger logger;
 
 	public Client(int id, String name, float balance) {
@@ -15,7 +17,7 @@ public class Client {
 		this.id = id;
 		this.name = name;
 		this.balance = balance;
-		logger.log();
+		Logger.log(log);
 	}
 
 	public int getId() {
@@ -42,33 +44,45 @@ public class Client {
 		this.balance = balance;
 	}
 
-	public void addAccount() {
-		accounts[null]= new Account;
-		Logger.log();
+	public void addAccount(Account) {
+		for (int i = 0; i < accounts.length; i++) {
+			if(accounts[i] == null) {
+				accounts[i] = Account;
+				Logger.log();
+				}
+			}	
 	}
 	public Account getAccount(int id) {
 		return accounts[id];
 	}
 	public void removeAccount (int id) {
-		balance += accounts[id];
-		accounts[id] = null;
-		Logger.log();
+		balance += (accounts[id].getBalance());
+		for (int i = 0; i < accounts.length; i++) {
+			if(i == id) {
+				accounts[i] = null;
+				Logger.log();
+				}
+			}	
 	}
-	public void deposit (float) {
-		add amount;
-		commission charge at commissionRate;
+	public void deposit (float amount) {
+		balance += amount;
+		commissionRate;
 		Logger.log();
 		
 	}
-	public void withdraw (float) {
-		remove amount;
-		commission charge at commissionRate;
+	public void withdraw (float amount) {
+		balance -= amount;
+		commissionRate;
 		Logger.log();
 	}
 	public void autoUpdateAccounts() {
 		interestRate;
 	}
 	public float getFortune() {
-		return (Client.balance + accounts);
+		float fortune = balance;
+		for (int j = 0; j <= accounts.length; j++) {
+			fortune+=accounts[j].getBalance();
+		}
+		return (fortune + getAccount(i)); // array?
 	}
 }
