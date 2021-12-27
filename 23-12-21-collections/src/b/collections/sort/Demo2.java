@@ -1,7 +1,6 @@
 package b.collections.sort;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Demo2 {
@@ -22,7 +21,7 @@ public class Demo2 {
 //		Collections.sort(list); // sort 2
 		
 		System.out.println("other order - name");
-		PersonNameComparator comparator = new PersonNameComparator()
+		PersonNameComparator comparator = new PersonNameComparator();
 		System.out.println(list); // print again
 
 	}
