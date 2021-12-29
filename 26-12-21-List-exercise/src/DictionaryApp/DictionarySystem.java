@@ -94,7 +94,7 @@ public class DictionarySystem {
 	}
 
 	public void printMenu() {
-		System.out.println("\n== Menu =========");
+		System.out.println("\n== Menu ====================");
 		System.out.println("Add Entry .......... add / 1");
 		System.out.println("Get Definition ..... get / 2");
 		System.out.println("Edit Definition .... edit / 3");
