@@ -9,10 +9,9 @@ public abstract class Car {
 		super();
 	}
 
-	public Car(int number, int speed) {
+	public Car(int number) {
 		super();
 		this.number = number;
-		this.speed = speed;
 	}
 
 	public int getNumber() {
@@ -27,8 +26,17 @@ public abstract class Car {
 		this.number = number;
 	}
 
-	public void setSpeed(int speed) {
-		this.speed = speed;
+	public boolean setSpeed(int speed) {
+		if(speed>=0 && speed <=110) {
+			this.speed = speed;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "Car [number=" + number + ", speed=" + speed + "]";
 	} 
 	
 	

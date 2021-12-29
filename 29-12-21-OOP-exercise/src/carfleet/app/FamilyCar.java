@@ -7,9 +7,14 @@ public class FamilyCar extends Car{
 		// TODO Auto-generated constructor stub
 	}
 
-	public FamilyCar(int number, int speed) {
-		super(number, speed);
+	public FamilyCar(int number) {
+		super(number);
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "FamilyCar [number=" + getNumber() + ", speed=" + getSpeed() + "]";
 	}
 	
 	

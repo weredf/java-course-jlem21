@@ -1,28 +1,29 @@
 package carfleet.app;
 
+import java.util.Arrays;
+
 public class Highway {
 	
-	private Name name;
-	Car[] cars = new Car[100];
-	
+	private String name;
+	private Car[] cars = new Car[100];
+	/*
 	public enum Name {
 		HIGHWAY1, HIGHWAY2, HIGHWAY3, HIGHWAY4, HIGHWAY5
 	}
-	
+	*/
 	
 	public Highway() {
 		super();
 	}
 
 
-	public Highway(Name name, Car[] cars) {
+	public Highway(String name) {
 		super();
 		this.name = name;
-		this.cars = cars;
 	}
 
 
-	public Name getName() {
+	public String getName() {
 		return name;
 	}
 
@@ -32,7 +33,7 @@ public class Highway {
 	}
 
 
-	public void setName(Name name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -41,5 +42,20 @@ public class Highway {
 		this.cars = cars;
 	}
 
+	public void addCar(Car car) {
+	for (int i = 0; i < cars.length; i++) {
+		if (this.cars[i] == null) {
+			this.cars[i] = car;
+			return;
+			}
+		}
+	}
 
+
+	@Override
+	public String toString() {
+		return "Highway [name=" + name + ", cars=" + Arrays.toString(cars) + "]";
+	}
+	
+	
 }

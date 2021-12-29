@@ -1,5 +1,7 @@
 package carfleet.app;
 
+import java.util.Arrays;
+
 public class Country {
 
 	Highway[] highways = new Highway[5];
@@ -23,17 +25,18 @@ public class Country {
 	}
 
 	public void addHighways(Highway highway) {
-		
-	}
-
-	public void showCountry() {
-		System.out.println("==============================");
-		System.out.println("Country: ");
-		System.out.println("Highways: ");
-		for (int i = 0; i<highways.length; i++) {
-			System.out.println(highways[i].getName());
+		for (int i = 0; i < highways.length; i++) {
+			if(this.highways[i] == null) {
+				this.highways[i] = highway;
+				return;
+			}
 		}
-		System.out.println("==============================");
 	}
 	
+	
+
+	@Override
+	public String toString() {
+		return "Country [highways=" + Arrays.toString(highways) + "]";
+	}
 }

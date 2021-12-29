@@ -7,9 +7,14 @@ public class SportsCar extends Car{
 		// TODO Auto-generated constructor stub
 	}
 
-	public SportsCar(int number, int speed) {
-		super(number, speed);
+	public SportsCar(int number) {
+		super(number);
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "SportsCar [number=" + getNumber() + ", speed()=" + getSpeed() + "]";
 	}
 	
 	
