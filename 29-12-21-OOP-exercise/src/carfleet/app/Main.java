@@ -11,6 +11,15 @@ public class Main {
 
 		System.out.println("=======================================================");
 		System.out.println("Total amount of cars in country: " + amountCars(country));
+		/*
+		// alternative methods from class country and highway	
+		System.out.println(country.getNumberOfCars());
+		for (Highway h : country.getHighways()) {
+			if (h!=null) {
+			System.out.println(h.getName() + ", number of cars: " + h.getNumberOfCars());
+			}
+		}
+		*/
 		System.out.println("=======================================================");
 		System.out.println("Average speed in country: " + avgSpeed(country));
 		System.out.println("=======================================================");
@@ -20,43 +29,41 @@ public class Main {
 		
 	}
 
-	private static void createCountry(Country country) {
+	// fill country with highways
+	private static void createCountry(Country country) { 
 		for (int i = 0; i < country.getHighways().length; i++) {
 			Highway highway = new Highway("Highway" + (i + 1));
 			country.addHighways(highway);
 		}
 	}
 
-	private static void initializeCountry(Country country) {
+	// fill every highway with cars
+	private static void initializeCountry(Country country) { 
 		for (int i = 0; i < country.getHighways().length; i++) {
 			int lengthCars = (int)(Math.random() * country.getHighways()[i].getCars().length);
-			System.out.println("Cars waiting to go on Highway" + (i + 1) + ": " + lengthCars);
+			System.out.println("Amount of cars waiting to go on Highway" + (i + 1) + ": " + lengthCars);
 			for (int j = 0; j < lengthCars; j++) {
-				int speed = (int) (Math.random() * 151);
-				Car car;
+				int speed = (int) (Math.random() * 131); // 111-130 is illegal speed
+				Car car = null;
 				if (Math.random() > 0.5) {
-					car = new FamilyCar(j + 1);
-					if(!car.setSpeed(speed)) {
-						car = null;
-					}
+					car = new FamilyCar(j + 1, speed);
 				} else {
-					car = new SportsCar((j + 1));
-					if(!car.setSpeed(speed)) {
-						car = null;
-					}
+					car = new SportsCar(j + 1, speed);
 				}
 				country.getHighways()[i].addCar(car);
 			}
 		}
 	}
 
-	private static void showCountry(Country country) {
+	// print all highway arrays in country
+	private static void showCountry(Country country) { 
 		for (int i = 0; i < country.getHighways().length; i++) {
 			System.out.println(country.getHighways()[i]);
 		}
 	}
 
-	private static int amountCarsInHighway(Highway highway) {
+	// counter amount of cars in every highway
+	private static int amountCarsInHighway(Highway highway) { 
 		int amount = 0;
 		for (int i = 0; i < highway.getCars().length; i++) {
 			if (highway.getCars()[i] != null) {
@@ -66,7 +73,8 @@ public class Main {
 		return amount;
 	}
 
-	private static int amountCars(Country country) {
+	// counter summing up all cars from all highways
+	private static int amountCars(Country country) { 
 		int amount = 0;
 		for (int i = 0; i < country.getHighways().length; i++) {
 			int amountTemp = amountCarsInHighway(country.getHighways()[i]);
@@ -76,7 +84,8 @@ public class Main {
 		return amount;
 	}
 
-	private static double avgSpeedinHighway(Highway highway) {
+	// average speed per highway
+	private static double avgSpeedinHighway(Highway highway) { 
 		int sum = 0;
 		int count = 0;
 		for (int i = 0; i < highway.getCars().length; i++) {
@@ -91,7 +100,8 @@ public class Main {
 		return 0;
 	}
 	
-	private static double avgSpeed(Country country) {
+	// average of average speeds per highway
+	private static double avgSpeed(Country country) { 
 		double sum = 0;
 		int count = 0;
 		double maxAvg = 0;
@@ -111,7 +121,8 @@ public class Main {
 		return sum/count;
 	}
 
-	private static int maxSpeedinHighway(Highway highway) {
+	// highest speed on highway
+	private static int maxSpeedinHighway(Highway highway) { 
 		int maxSpeed = 0;
 		for(int i = 0; i < highway.getCars().length; i++) {
 			if(highway.getCars()[i] != null) {
@@ -123,7 +134,8 @@ public class Main {
 		return maxSpeed;
 	}
 	
-	private static int maxSpeed(Country country) {
+	// highest speed in all highways
+	private static int maxSpeed(Country country) { 
 		int maxSpeed = 0;
 		for (int i = 0; i < country.getHighways().length; i++) {
 			int maxSpeedHighway = maxSpeedinHighway(country.getHighways()[i]);
@@ -135,7 +147,8 @@ public class Main {
 		return maxSpeed;
 	}
 
-	private static String busyHighway(Country country) {
+	// find highway with the most cars
+	private static String busyHighway(Country country) { 
 		int maxCars = 0;
 		String nameHighwayMaxCars = "";
 		for(int i = 0; i < country.getHighways().length; i++) {

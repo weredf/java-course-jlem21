@@ -4,7 +4,8 @@ import java.util.Arrays;
 
 public class Country {
 
-	Highway[] highways = new Highway[5];
+	public static final int MAX = 5;
+	Highway[] highways = new Highway[MAX];
 
 	public Country() {
 		super();
@@ -14,7 +15,6 @@ public class Country {
 		super();
 		this.highways = highways;
 	}
-	
 
 	public Highway[] getHighways() {
 		return highways;
@@ -26,14 +26,22 @@ public class Country {
 
 	public void addHighways(Highway highway) {
 		for (int i = 0; i < highways.length; i++) {
-			if(this.highways[i] == null) {
+			if (this.highways[i] == null) {
 				this.highways[i] = highway;
 				return;
 			}
 		}
 	}
-	
-	
+
+	public int getNumberOfCars() {
+		int c = 0;
+		for (Highway highway : highways) {
+			if (highway != null) {
+				c += highway.getNumberOfCars();
+			}
+		}
+		return c;
+	}
 
 	@Override
 	public String toString() {

@@ -3,14 +3,17 @@ package carfleet.app;
 public abstract class Car {
 	
 	private int number;
-	private int speed;
+	private int speed; // set to 0-110
+	public static final int MIN_SPEED = 0;
+	public static final int MAX_SPEED = 110;
 	
 	public Car() {
 		super();
 	}
 
-	public Car(int number) {
+	public Car(int number, int speed) {
 		super();
+		this.speed = speed;
 		this.number = number;
 	}
 
@@ -27,7 +30,7 @@ public abstract class Car {
 	}
 
 	public boolean setSpeed(int speed) {
-		if(speed>=0 && speed <=110) {
+		if(speed >= MIN_SPEED && speed <= MAX_SPEED) {
 			this.speed = speed;
 			return true;
 		}
