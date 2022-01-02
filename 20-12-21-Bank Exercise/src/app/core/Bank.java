@@ -61,19 +61,19 @@ public class Bank {
 		return clients;
 	}
 	
-	public Log viewLogs() {
+//	public Log viewLogs() {
 		// print all logs that are stored in the logger
-	}
+//	}
 	
 	public void startAccountUpdater() {
 		
 	}
 	
-	public void addCommission(float) {
+//	public void addCommission(float) {
 //		for (Log.getLogs(); description == withdraw;) {
 //			balance+=withdraw.commission;			
 //		}
-	}
+//	}
 	
 	public void printClientList() {
 		System.out.println(Arrays.toString(clients));
