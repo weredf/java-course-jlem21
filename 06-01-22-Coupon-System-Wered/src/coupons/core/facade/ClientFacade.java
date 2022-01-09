@@ -1,6 +1,18 @@
 package coupons.core.facade;
 
-public abstract class ClientFacade {
+import coupons.core.dao.CompaniesDAO;
+import coupons.core.dao.CouponsDAO;
+import coupons.core.dao.CustomersDAO;
+import coupons.core.exceptions.CouponSystemException;
 
+public abstract class ClientFacade{
+
+	protected CompaniesDAO companiesDAO;
+	protected CustomersDAO customersDAO;
+	protected CouponsDAO couponsDAO;
+	
+	public boolean login(String email, String password) throws CouponSystemException {
+		return false;
+	}
 	
 }

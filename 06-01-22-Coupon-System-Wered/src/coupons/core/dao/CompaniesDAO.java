@@ -3,30 +3,25 @@ package coupons.core.dao;
 import java.util.ArrayList;
 
 import coupons.core.beans.Company;
+import coupons.core.exceptions.CouponSystemException;
 
 public interface CompaniesDAO {
 
-	public boolean isCompanyExists(String email, String Password) {
-		return false;
-	}
+	boolean isCompanyExists(String email, String password) throws CouponSystemException;
 	
-	public void addCompany(Company company) {
-		
-	}
+	// return company id of company created
+	int addCompany(Company company) throws CouponSystemException;
 	
-	public void updateCompany(Company company) {
-		
-	}
+	/**
+	 * 
+	 * @param company
+	 * @throws CouponSystemException if the company specified is not found or some SQL error
+	 */
+	void updateCompany(Company company) throws CouponSystemException;
 	
-	public void deleteCompany(int companyId) {
-		
-	}
+	void deleteCompany(int companyId) throws CouponSystemException;
 	
-	public ArrayList<Company> getAllCompanies() {
-		return null;
-	}
+	ArrayList<Company> getAllCompanies() throws CouponSystemException;
 	
-	public Company getOneCompany(int companyId) {
-		return null;
-	}
+	Company getOneCompany(int companyId) throws CouponSystemException;
 }

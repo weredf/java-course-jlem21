@@ -45,10 +45,6 @@ public class ConnectionPool {
 		return instance;
 	}
 
-	public boolean isOpen() {
-		return open;
-	}
-
 	// check if open, check if connection available or wait, get one connection from
 	// the set of connections, remove from set
 	public synchronized Connection getConnection() throws CouponSystemException {
