@@ -11,7 +11,7 @@ public class Customer {
 	private String lastName;
 	private String email;
 	private String password;
-	private List<Coupon> coupons = new ArrayList<>();
+	private List<Coupon> coupons = new ArrayList<>(); // to do - create list of all coupons that are purchased by customer?
 	
 	 public Customer() {
 	}
