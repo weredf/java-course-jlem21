@@ -11,8 +11,6 @@ public abstract class ClientFacade{
 	protected CustomersDAO customersDAO;
 	protected CouponsDAO couponsDAO;
 	
-	public boolean login(String email, String password) throws CouponSystemException {
-		return false;
-	}
+	public abstract boolean login(String email, String password) throws CouponSystemException;
 	
 }

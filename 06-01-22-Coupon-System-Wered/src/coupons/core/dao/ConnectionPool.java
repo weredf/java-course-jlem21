@@ -34,6 +34,11 @@ public class ConnectionPool {
 	// getter for private singleton object
 	// method catches exception from private method ConnectionPool() and throws
 	// local exception
+	/**
+	 * Getter for private singleton object ConnectionPool
+	 * @return instance ConnectionPool
+	 * @throws CouponSystemException
+	 */
 	public static ConnectionPool getInstance() throws CouponSystemException {
 		if (instance == null) {
 			try {
@@ -47,6 +52,13 @@ public class ConnectionPool {
 
 	// check if open, check if connection available or wait, get one connection from
 	// the set of connections, remove from set
+	/**
+	 * Checks if connection pool is open, and a connection is available (or wait),
+	 * gets one connection from the set of connections (removes from the set)
+	 * 
+	 * @return Connection
+	 * @throws CouponSystemException
+	 */
 	public synchronized Connection getConnection() throws CouponSystemException {
 		if (!open) {
 			throw new CouponSystemException("getConnection failed - pool is closed");
@@ -65,6 +77,11 @@ public class ConnectionPool {
 	}
 
 	// add connection to the set and notify
+	/**
+	 * Returns connection to the set and notifies
+	 * 
+	 * @param connection
+	 */
 	public synchronized void restoreConnection(Connection connection) {
 		connections.add(connection);
 		notify();
@@ -73,6 +90,12 @@ public class ConnectionPool {
 	// first close the pool so nothing can be taken out anymore
 	// then wait until all connections are returned
 	// close all connections and remove from set
+	/**
+	 * Closes the connection pool, waits until all connections are returned, closes
+	 * all connections and removes them from the set
+	 * 
+	 * @throws CouponSystemException
+	 */
 	public synchronized void closeAllConnections() throws CouponSystemException {
 		open = false;
 		while (connections.size() < SIZE) {

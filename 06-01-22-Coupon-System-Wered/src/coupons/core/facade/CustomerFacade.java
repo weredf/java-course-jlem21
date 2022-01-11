@@ -19,7 +19,7 @@ public class CustomerFacade extends ClientFacade {
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
 		// check if details match row in table customers
-		return super.login(email, password);
+		return false;
 	}
 	
 	public void purchaseCoupon(Coupon coupon) {
