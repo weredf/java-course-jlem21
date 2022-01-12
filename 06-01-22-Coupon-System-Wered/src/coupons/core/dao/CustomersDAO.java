@@ -11,10 +11,18 @@ public interface CustomersDAO {
 	 * Check if customer exists
 	 * @param email
 	 * @param password
-	 * @return
+	 * @return boolean
 	 * @throws CouponSystemException
 	 */
 	boolean isCustomerExists(String email, String password) throws CouponSystemException;
+	
+	/**
+	 * Check if customer exists
+	 * @param customerId
+	 * @return boolean
+	 * @throws CouponSystemException
+	 */
+	boolean isCustomerExists(int customerId) throws CouponSystemException;
 	
 	/**
 	 * Add a customer to the customers database
@@ -39,6 +47,18 @@ public interface CustomersDAO {
 	void deleteCustomer(int customerId) throws CouponSystemException;
 	
 	/**
+	 * Check if coupon purchases by customer exist in customers_vs_coupons database
+	 * @param customerId
+	 */
+	boolean isCustomerCouponPurchaseExists(int customerId) throws CouponSystemException;
+	
+	/**
+	 * Delete all coupon purchases by customer from customers_vs_coupons database
+	 * @param customerId
+	 */
+	void deleteCustomerCouponPurchase(int customerId) throws CouponSystemException;
+	
+	/**
 	 * Get all customers from customers database
 	 * @return ArrayList<Customer>
 	 * @throws CouponSystemException
@@ -52,4 +72,6 @@ public interface CustomersDAO {
 	 * @throws CouponSystemException
 	 */
 	Customer getOneCustomer(int customerId) throws CouponSystemException;
+
+
 }

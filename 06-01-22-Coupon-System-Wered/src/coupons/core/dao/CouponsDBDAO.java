@@ -16,6 +16,37 @@ public class CouponsDBDAO implements CouponsDAO{
 	private ConnectionPool connectionPool;
 
 	@Override
+	public boolean isCouponExists(int companyId, String title) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from coupons where company_id = ?, title = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, companyId);
+			pstmt.setString(1, title);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("isCustomerExists failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public boolean isCouponExists(int id) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from coupons where id = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("isCustomerExists failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+	
+	@Override
 	public int addCoupon(Coupon coupon) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
 		String sql = "insert into coupons values(0, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -155,5 +186,4 @@ public class CouponsDBDAO implements CouponsDAO{
 		}
 	}
 
-	
 }

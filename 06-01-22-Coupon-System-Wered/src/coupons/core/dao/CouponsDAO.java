@@ -8,6 +8,23 @@ import coupons.core.exceptions.CouponSystemException;
 public interface CouponsDAO {
 
 	/**
+	 * Check if coupon title is used for this company
+	 * @param companyId
+	 * @param title
+	 * @return boolean
+	 * @throws CouponSystemException
+	 */
+	boolean isCouponExists(int companyId, String title) throws CouponSystemException;
+	
+	/**
+	 * Check if coupon exists
+	 * @param id
+	 * @return boolean
+	 * @throws CouponSystemException
+	 */
+	boolean isCouponExists(int id) throws CouponSystemException;
+
+	/**
 	 * Add a coupon to the coupons database
 	 * @param coupon
 	 * @return automatically generated coupon id from database of coupon created
@@ -59,4 +76,6 @@ public interface CouponsDAO {
 	 * @throws CouponSystemException
 	 */
 	void deleteCouponPurchase(int customerId, int couponId) throws CouponSystemException;
+
+
 }
