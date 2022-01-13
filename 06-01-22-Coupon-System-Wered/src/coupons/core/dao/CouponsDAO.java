@@ -2,6 +2,7 @@ package coupons.core.dao;
 
 import java.util.ArrayList;
 
+import coupons.core.beans.Category;
 import coupons.core.beans.Coupon;
 import coupons.core.exceptions.CouponSystemException;
 
@@ -23,6 +24,23 @@ public interface CouponsDAO {
 	 * @throws CouponSystemException
 	 */
 	boolean isCouponExists(int id) throws CouponSystemException;
+
+	/**
+	 * Check if coupon purchase exists
+	 * @param couponId
+	 * @return boolean
+	 * @throws CouponSystemException
+	 */
+	boolean isCouponPurchaseExists(int couponId) throws CouponSystemException;
+
+	/**
+	 * Check if coupon purchase exists for one customer
+	 * @param customerId
+	 * @param id
+	 * @return boolean
+	 * @throws CouponSystemException
+	 */
+	boolean isCouponPurchaseExists(int customerId, int couponId) throws CouponSystemException;
 
 	/**
 	 * Add a coupon to the coupons database
@@ -54,6 +72,57 @@ public interface CouponsDAO {
 	ArrayList<Coupon> getAllCoupons() throws CouponSystemException;
 	
 	/**
+	 * Get all coupons for one company
+	 * @param companyId
+	 * @return ArrayList<Coupon>
+	 * @throws CouponSystemException
+	 */
+	ArrayList<Coupon> getAllCouponsForCompany(int companyId) throws CouponSystemException;
+
+	/**
+	 * Get all coupons for one company in one category
+	 * @param companyId
+	 * @return ArrayList<Coupon>
+	 * @throws CouponSystemException
+	 */
+	ArrayList<Coupon> getAllCouponsInCategoryForCompany(int companyId, Category category) throws CouponSystemException;
+
+	/**
+	 * Get all coupons for one company up to max price
+	 * @param companyId
+	 * @param maxPrice
+	 * @return ArrayList<Coupon>
+	 * @throws CouponSystemException
+	 */
+	ArrayList<Coupon> getAllCouponsForCompanyMax(int companyId, double maxPrice) throws CouponSystemException;
+
+	/**
+	 * Get all coupons for one customer
+	 * @param customerId
+	 * @return ArrayList<Coupon>
+	 * @throws CouponSystemException
+	 */
+	ArrayList<Coupon> getAllCouponsForCustomer(int customerId) throws CouponSystemException;
+
+	/**
+	 * Get all coupons for one customer in one category
+	 * @param customerId
+	 * @param category
+	 * @return ArrayList<Coupon>
+	 * @throws CouponSystemException
+	 */
+	ArrayList<Coupon> getAllCouponsInCategoryForCustomer(int customerId, Category category) throws CouponSystemException;
+
+	/**
+	 * Get all coupons for once customer up to max price
+	 * @param customerId
+	 * @param maxPrice
+	 * @return ArrayList<Coupon>
+	 * @throws CouponSystemException
+	 */
+	ArrayList<Coupon> getAllCouponsForCustomerMax(int customerId, double maxPrice) throws CouponSystemException;
+
+	/**
 	 * Get one coupon from coupons database
 	 * @param couponId
 	 * @return Coupon
@@ -77,5 +146,11 @@ public interface CouponsDAO {
 	 */
 	void deleteCouponPurchase(int customerId, int couponId) throws CouponSystemException;
 
+	/**
+	 * Delete a purchased coupon from customers_vs_coupons database for all customers
+	 * @param couponId
+	 * @throws CouponSystemException
+	 */
+	void deleteCouponPurchase(int couponId) throws CouponSystemException;
 
 }

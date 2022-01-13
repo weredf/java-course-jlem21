@@ -10,9 +10,9 @@ import coupons.core.beans.Company;
 import coupons.core.exceptions.CouponSystemException;
 
 public class CompaniesDBDAO implements CompaniesDAO {
-	
+
 	private ConnectionPool connectionPool;
-	
+
 	@Override
 	public boolean isCompanyExists(String email, String password) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
@@ -28,7 +28,7 @@ public class CompaniesDBDAO implements CompaniesDAO {
 			connectionPool.restoreConnection(c);
 		}
 	}
-	
+
 	@Override
 	public boolean isCompanyExists(int companyId) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
@@ -70,7 +70,37 @@ public class CompaniesDBDAO implements CompaniesDAO {
 			ResultSet rs = pstmt.executeQuery();
 			return rs.next();
 		} catch (SQLException e) {
-			throw new CouponSystemException("isCompanyExists failed", e);
+			throw new CouponSystemException("isCompanyExistsNameOrEmail failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public boolean isCompanyCouponExists(int companyId) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from coupons where company_id = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, companyId);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("isCompanyCouponExists failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public boolean isCompanyCouponPurchaseExists(int companyId) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from customers_vs_coupons where coupon_id in (select id from coupon where company_id = ?)";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, companyId);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("isCompanyCouponExists failed", e);
 		} finally {
 			connectionPool.restoreConnection(c);
 		}
@@ -134,22 +164,7 @@ public class CompaniesDBDAO implements CompaniesDAO {
 			connectionPool.restoreConnection(c);
 		}
 	}
-	
-	@Override
-	public boolean isCompanyCouponExists(int companyId) throws CouponSystemException {
-		Connection c = connectionPool.getConnection();
-		String sql = "select * from coupons where company_id = ?";
-		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
-			pstmt.setInt(1, companyId);
-			ResultSet rs = pstmt.executeQuery();
-			return rs.next();
-		} catch (SQLException e) {
-			throw new CouponSystemException("isCustomerExists failed", e);
-		} finally {
-			connectionPool.restoreConnection(c);
-		}
-	}
-	
+
 	@Override
 	public void deleteCompanyCoupon(int companyId) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
@@ -166,7 +181,7 @@ public class CompaniesDBDAO implements CompaniesDAO {
 			connectionPool.restoreConnection(c);
 		}
 	}
-	
+
 	@Override
 	public void deleteCompanyCouponPurchase(int companyId) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();

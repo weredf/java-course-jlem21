@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import coupons.core.beans.Customer;
 import coupons.core.exceptions.CouponSystemException;
 
-public class CustomersDBDAO implements CustomersDAO{
-	
+public class CustomersDBDAO implements CustomersDAO {
+
 	private ConnectionPool connectionPool;
 
 	@Override
@@ -43,7 +43,7 @@ public class CustomersDBDAO implements CustomersDAO{
 			connectionPool.restoreConnection(c);
 		}
 	}
-	
+
 	@Override
 	public int addCustomer(Customer customer) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
@@ -101,7 +101,6 @@ public class CustomersDBDAO implements CustomersDAO{
 		}
 	}
 
-	
 	@Override
 	public boolean isCustomerCouponPurchaseExists(int customerId) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
@@ -111,12 +110,12 @@ public class CustomersDBDAO implements CustomersDAO{
 			ResultSet rs = pstmt.executeQuery();
 			return rs.next();
 		} catch (SQLException e) {
-			throw new CouponSystemException("isCustomerExists failed", e);
+			throw new CouponSystemException("isCustomerCouponPurchaseExists failed", e);
 		} finally {
 			connectionPool.restoreConnection(c);
 		}
 	}
-	
+
 	@Override
 	public void deleteCustomerCouponPurchase(int customerId) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
@@ -142,7 +141,8 @@ public class CustomersDBDAO implements CustomersDAO{
 			ResultSet rs = pstmt.executeQuery();
 			ArrayList<Customer> customers = new ArrayList<>();
 			while (rs.next()) {
-				Customer cus = new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+				Customer cus = new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+						rs.getString(5));
 				customers.add(cus);
 			}
 			return customers;
@@ -161,7 +161,8 @@ public class CustomersDBDAO implements CustomersDAO{
 			pstmt.setInt(1, customerId);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
-				Customer cus = new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+				Customer cus = new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+						rs.getString(5));
 				return cus;
 			} else {
 				throw new CouponSystemException("getOneCustomer " + customerId + " failed - not found");

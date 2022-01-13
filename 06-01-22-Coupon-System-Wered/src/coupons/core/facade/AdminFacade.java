@@ -27,7 +27,11 @@ public class AdminFacade extends ClientFacade {
 			if (!companiesDAO.isCompanyExistsNameOrEmail(company.getName(), company.getEmail())) {
 				// add company
 				companiesDAO.addCompany(company);
+			} else {
+				throw new CouponSystemException("addCompany failed - company name " + company.getName() + "already exists or email " + company.getEmail() + " already in use");
 			}
+		} else {
+			throw new CouponSystemException("addCompany failed - input not valid");
 		}
 	}
 
@@ -36,12 +40,24 @@ public class AdminFacade extends ClientFacade {
 		if (company.getId() != 0 && company.getName() != null) {
 			// check if company exists
 			if (companiesDAO.isCompanyExists(company.getId(), company.getName())) {
-				// check if update input is valid
-				if (company.getEmail() != null && company.getPassword() != null) {
-					// update company
-					companiesDAO.updateCompany(company);
+				// check if input matches - cannot update company Id or name
+				Company c = companiesDAO.getOneCompany(company.getId());
+				if (c.getName() == company.getName()) {
+					// check if update input is valid
+					if (company.getEmail() != null && company.getPassword() != null) {
+						// update company
+						companiesDAO.updateCompany(company);
+					} else {
+						throw new CouponSystemException("updateCompany failed - update input not valid");
+					}
+				} else {
+					throw new CouponSystemException("updateCompany " + company + " failed - can't update id or name");
 				}
+			} else {
+				throw new CouponSystemException("updateCompany failed - company " + company + "doesn't exist");
 			}
+		} else {
+			throw new CouponSystemException("updateCompany failed - search input not valid");
 		}
 	}
 
@@ -50,13 +66,23 @@ public class AdminFacade extends ClientFacade {
 		if (companiesDAO.isCompanyExists(companyId)) {
 			// check if coupons exist
 			if (companiesDAO.isCompanyCouponExists(companyId)) {
-				// delete coupon purchases for this company by customers
-				companiesDAO.deleteCompanyCouponPurchase(companyId);
-				// delete all coupons the company had
-				companiesDAO.deleteCompanyCoupon(companyId);
-				// delete company
+				// check if coupon purchases for this company exist
+				if (companiesDAO.isCompanyCouponPurchaseExists(companyId)) {
+					// delete coupon purchases for this company by customers
+					companiesDAO.deleteCompanyCouponPurchase(companyId);
+					// delete all coupons the company had
+					companiesDAO.deleteCompanyCoupon(companyId);
+					// delete company
+					companiesDAO.deleteCompany(companyId);
+				} else {
+					companiesDAO.deleteCompanyCoupon(companyId);
+					companiesDAO.deleteCompany(companyId);
+				}
+			} else {
 				companiesDAO.deleteCompany(companyId);
 			}
+		} else {
+			throw new CouponSystemException("deleteCompany " + companyId + "failed - company doesn't exist");
 		}
 	}
 
@@ -73,6 +99,8 @@ public class AdminFacade extends ClientFacade {
 		if (!customersDAO.isCustomerExists(customer.getEmail(), customer.getPassword())) {
 			// add customer
 			customersDAO.addCustomer(customer);
+		} else {
+			throw new CouponSystemException("addCustomer failed - customer email " + customer.getEmail() + " already in use");
 		}
 	}
 
@@ -86,8 +114,14 @@ public class AdminFacade extends ClientFacade {
 						&& customer.getPassword() != null) {
 					// update customer
 					customersDAO.updateCustomer(customer);
+				} else {
+					throw new CouponSystemException("updateCustomer failed - update input not valid");
 				}
+			} else {
+				throw new CouponSystemException("updateCustomer failed - customer " + customer + "already exists");
 			}
+		} else {
+			throw new CouponSystemException("updateCustomer failed - search input not valid");
 		}
 	}
 
@@ -100,7 +134,11 @@ public class AdminFacade extends ClientFacade {
 				customersDAO.deleteCustomerCouponPurchase(customerId);
 				// delete customer
 				customersDAO.deleteCustomer(customerId);
+			} else {
+				customersDAO.deleteCustomer(customerId);
 			}
+		} else {
+			throw new CouponSystemException("deleteCustomer " + customerId + "failed - customer doesn't exist");
 		}
 	}
 

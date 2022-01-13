@@ -43,6 +43,22 @@ public interface CompaniesDAO {
 	boolean isCompanyExistsNameOrEmail(String name, String email) throws CouponSystemException;
 	
 	/**
+	 * Check if coupons by company exist
+	 * @param companyId
+	 * @return boolean
+	 * @throws CouponSystemException
+	 */
+	boolean isCompanyCouponExists(int companyId) throws CouponSystemException;
+	
+	/**
+	 * Check if coupon purchases of company exist
+	 * @param companyId
+	 * @return boolean
+	 * @throws CouponSystemException
+	 */
+	boolean isCompanyCouponPurchaseExists(int companyId) throws CouponSystemException;
+
+	/**
 	 * Add a company to the companies database
 	 * @param company
 	 * @return automatically generated company id from database of company created
@@ -63,14 +79,6 @@ public interface CompaniesDAO {
 	 * @throws CouponSystemException
 	 */
 	void deleteCompany(int companyId) throws CouponSystemException;
-	
-	/**
-	 * Check if coupons by company exist
-	 * @param companyId
-	 * @return boolean
-	 * @throws CouponSystemException
-	 */
-	boolean isCompanyCouponExists(int companyId) throws CouponSystemException;
 	
 	/**
 	 * Delete all coupons of certain company from coupons database
@@ -100,6 +108,5 @@ public interface CompaniesDAO {
 	 * @throws CouponSystemException
 	 */
 	Company getOneCompany(int companyId) throws CouponSystemException;
-
 
 }

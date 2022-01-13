@@ -11,8 +11,8 @@ import coupons.core.beans.Category;
 import coupons.core.beans.Coupon;
 import coupons.core.exceptions.CouponSystemException;
 
-public class CouponsDBDAO implements CouponsDAO{
-	
+public class CouponsDBDAO implements CouponsDAO {
+
 	private ConnectionPool connectionPool;
 
 	@Override
@@ -25,7 +25,7 @@ public class CouponsDBDAO implements CouponsDAO{
 			ResultSet rs = pstmt.executeQuery();
 			return rs.next();
 		} catch (SQLException e) {
-			throw new CouponSystemException("isCustomerExists failed", e);
+			throw new CouponSystemException("isCouponExists failed", e);
 		} finally {
 			connectionPool.restoreConnection(c);
 		}
@@ -40,12 +40,43 @@ public class CouponsDBDAO implements CouponsDAO{
 			ResultSet rs = pstmt.executeQuery();
 			return rs.next();
 		} catch (SQLException e) {
-			throw new CouponSystemException("isCustomerExists failed", e);
+			throw new CouponSystemException("isCouponExists failed", e);
 		} finally {
 			connectionPool.restoreConnection(c);
 		}
 	}
-	
+
+	@Override
+	public boolean isCouponPurchaseExists(int couponId) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from customers_vs_coupons where coupon_id = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, couponId);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("isCouponPurchaseExists failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public boolean isCouponPurchaseExists(int customerId, int couponId) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from customers_vs_coupons where customer_id =? and coupon_id = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, customerId);
+			pstmt.setInt(2, couponId);
+			ResultSet rs = pstmt.executeQuery();
+			return rs.next();
+		} catch (SQLException e) {
+			throw new CouponSystemException("isCouponPurchaseExists failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
 	@Override
 	public int addCoupon(Coupon coupon) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
@@ -71,7 +102,7 @@ public class CouponsDBDAO implements CouponsDAO{
 		} finally {
 			connectionPool.restoreConnection(c);
 		}
-		
+
 	}
 
 	@Override
@@ -118,16 +149,156 @@ public class CouponsDBDAO implements CouponsDAO{
 	public ArrayList<Coupon> getAllCoupons() throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
 		String sql = "select * from coupons";
-		try (PreparedStatement pstmt = c.prepareStatement(sql);) {
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
 			ResultSet rs = pstmt.executeQuery();
 			ArrayList<Coupon> coupons = new ArrayList<>();
 			while (rs.next()) {
-				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4), rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8), rs.getFloat(9), rs.getString(10));
+				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4),
+						rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8),
+						rs.getFloat(9), rs.getString(10));
 				coupons.add(coup);
 			}
 			return coupons;
 		} catch (Exception e) {
 			throw new CouponSystemException("getAllCoupons failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public ArrayList<Coupon> getAllCouponsForCompany(int companyId) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from coupons where company_id = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, companyId);
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<Coupon> coupons = new ArrayList<>();
+			while (rs.next()) {
+				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4),
+						rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8),
+						rs.getFloat(9), rs.getString(10));
+				coupons.add(coup);
+			}
+			return coupons;
+		} catch (Exception e) {
+			throw new CouponSystemException("getAllCouponsForCompany failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public ArrayList<Coupon> getAllCouponsInCategoryForCompany(int companyId, Category category)
+			throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from coupons where company_id = ? and category = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, companyId);
+			pstmt.setString(2, category.toString());
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<Coupon> coupons = new ArrayList<>();
+			while (rs.next()) {
+				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4),
+						rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8),
+						rs.getFloat(9), rs.getString(10));
+				coupons.add(coup);
+			}
+			return coupons;
+		} catch (Exception e) {
+			throw new CouponSystemException("getAllCouponsInCategoryForCompany failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public ArrayList<Coupon> getAllCouponsForCompanyMax(int companyId, double maxPrice) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from coupons where company_id = ? and price < ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, companyId);
+			pstmt.setDouble(2, maxPrice);
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<Coupon> coupons = new ArrayList<>();
+			while (rs.next()) {
+				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4),
+						rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8),
+						rs.getFloat(9), rs.getString(10));
+				coupons.add(coup);
+			}
+			return coupons;
+		} catch (Exception e) {
+			throw new CouponSystemException("getAllCouponsForCompanyMax failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public ArrayList<Coupon> getAllCouponsForCustomer(int customerId) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from coupons where coupon_id in (select id from customers_vs_coupons values where customer_id = ?)";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, customerId);
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<Coupon> coupons = new ArrayList<>();
+			while (rs.next()) {
+				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4),
+						rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8),
+						rs.getFloat(9), rs.getString(10));
+				coupons.add(coup);
+			}
+			return coupons;
+		} catch (Exception e) {
+			throw new CouponSystemException("getAllCouponsForCustomer failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public ArrayList<Coupon> getAllCouponsInCategoryForCustomer(int customerId, Category category)
+			throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from coupons where coupon_id in (select id from customers_vs_coupons values where customer_id = ?) and category = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, customerId);
+			pstmt.setString(2, category.toString());
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<Coupon> coupons = new ArrayList<>();
+			while (rs.next()) {
+				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4),
+						rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8),
+						rs.getFloat(9), rs.getString(10));
+				coupons.add(coup);
+			}
+			return coupons;
+		} catch (Exception e) {
+			throw new CouponSystemException("getAllCouponsInCategoryForCustomer failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public ArrayList<Coupon> getAllCouponsForCustomerMax(int customerId, double maxPrice) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from coupons where coupon_id in (select id from customers_vs_coupons values where customer_id = ?) and price < ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, customerId);
+			pstmt.setDouble(2, maxPrice);
+			ResultSet rs = pstmt.executeQuery();
+			ArrayList<Coupon> coupons = new ArrayList<>();
+			while (rs.next()) {
+				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4),
+						rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8),
+						rs.getFloat(9), rs.getString(10));
+				coupons.add(coup);
+			}
+			return coupons;
+		} catch (Exception e) {
+			throw new CouponSystemException("getAllCouponsForCustomerMax failed", e);
 		} finally {
 			connectionPool.restoreConnection(c);
 		}
@@ -141,7 +312,9 @@ public class CouponsDBDAO implements CouponsDAO{
 			pstmt.setInt(1, couponId);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
-				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4), rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8), rs.getFloat(9), rs.getString(10));
+				Coupon coup = new Coupon(rs.getInt(1), rs.getInt(2), Category.valueOf(rs.getString(3)), rs.getString(4),
+						rs.getString(5), rs.getDate(6).toLocalDate(), rs.getDate(7).toLocalDate(), rs.getInt(8),
+						rs.getFloat(9), rs.getString(10));
 				return coup;
 			} else {
 				return null;
@@ -177,7 +350,25 @@ public class CouponsDBDAO implements CouponsDAO{
 			pstmt.setInt(2, couponId);
 			int rowCount = pstmt.executeUpdate();
 			if (rowCount == 0) {
-				throw new CouponSystemException("deleteCouponPurchase " + couponId + "for customer " + customerId + " failed - not found");
+				throw new CouponSystemException(
+						"deleteCouponPurchase " + couponId + "for customer " + customerId + " failed - not found");
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("deleteCouponPurchase failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public void deleteCouponPurchase(int couponId) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "delete from customers_vs_coupons where coupon_id = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setInt(1, couponId);
+			int rowCount = pstmt.executeUpdate();
+			if (rowCount == 0) {
+				throw new CouponSystemException("deleteCouponPurchase " + couponId + " failed - not found");
 			}
 		} catch (SQLException e) {
 			throw new CouponSystemException("deleteCouponPurchase failed", e);
