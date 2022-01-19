@@ -48,7 +48,7 @@ public class CustomersDBDAO implements CustomersDAO {
 	public int addCustomer(Customer customer) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
 		String sql = "insert into customers values(0, ?, ?, ?, ?)";
-		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+		try (PreparedStatement pstmt = c.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			pstmt.setString(1, customer.getFirstName());
 			pstmt.setString(2, customer.getLastName());
 			pstmt.setString(3, customer.getEmail());

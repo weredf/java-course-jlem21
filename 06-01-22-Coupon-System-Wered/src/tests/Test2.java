@@ -9,28 +9,23 @@ import coupons.core.exceptions.CouponSystemException;
 public class Test2 {
 
 	public static void main(String[] args) {
-		
+
 		try {
-			startSystem();
-			Company c = new Company(0, "CCC", "ccc@mail", "cccPass");
+			Company c = new Company(0, "BBB", "bbb@mail.com", "bbbPass");
 			CompaniesDAO dao = new CompaniesDBDAO();
-			dao.addCompany(c);
-			System.out.println("success");
+			int id = dao.addCompany(c);
+			System.out.println("created company: " + id);
+			System.out.println(c);
 		} catch (CouponSystemException e) {
 			System.out.println("Error: " + e.getMessage());
 		} finally {
-			stopSystem();
+			try {
+				ConnectionPool.getInstance().closeAllConnections();
+				System.out.println("All connections closed");
+			} catch (CouponSystemException e) {
+				System.out.println("Error: " + e.getMessage());
+			}
 		}
 	}
-	
-	public static void startSystem() throws CouponSystemException {
-		ConnectionPool pool = ConnectionPool.getInstance();
-		System.out.println("connection pool up");
-	}
-	
-	public static void stopSystem() {
-		
-		System.out.println("connection pool down");
-	}
-	
+
 }

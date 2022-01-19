@@ -81,7 +81,7 @@ public class CouponsDBDAO implements CouponsDAO {
 	public int addCoupon(Coupon coupon) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
 		String sql = "insert into coupons values(0, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+		try (PreparedStatement pstmt = c.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			pstmt.setInt(1, coupon.getCompany());
 			pstmt.setString(2, coupon.getCategory().toString());
 			pstmt.setString(3, coupon.getTitle());

@@ -110,7 +110,7 @@ public class CompaniesDBDAO implements CompaniesDAO {
 	public int addCompany(Company company) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
 		String sql = "insert into companies values(0, ?, ?, ?)";
-		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+		try (PreparedStatement pstmt = c.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 			pstmt.setString(1, company.getName());
 			pstmt.setString(2, company.getEmail());
 			pstmt.setString(3, company.getPassword());
