@@ -9,7 +9,6 @@ import coupons.core.exceptions.CouponSystemException;
 public class Test2 {
 
 	public static void main(String[] args) {
-
 		try {
 			Company c = new Company(0, "BBB", "bbb@mail.com", "bbbPass");
 			CompaniesDAO dao = new CompaniesDBDAO();

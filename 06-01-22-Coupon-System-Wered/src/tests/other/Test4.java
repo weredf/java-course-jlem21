@@ -9,7 +9,6 @@ import coupons.core.exceptions.CouponSystemException;
 public class Test4 {
 
 	public static void main(String[] args) {
-		
 		try {
 			startSystem();
 			Company c = new Company(0, "CCC", "ccc@mail", "cccPass");
@@ -32,5 +31,5 @@ public class Test4 {
 		
 		System.out.println("connection pool down");
 	}
-	
+
 }
