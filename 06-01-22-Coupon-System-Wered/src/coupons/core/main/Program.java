@@ -1,6 +1,6 @@
 package coupons.core.main;
 
-import tests.Test;
+import tests.main.Test;
 
 public class Program {
 	

@@ -1,4 +1,4 @@
-package tests;
+package tests.other;
 
 import coupons.core.beans.Company;
 import coupons.core.dao.CompaniesDAO;
