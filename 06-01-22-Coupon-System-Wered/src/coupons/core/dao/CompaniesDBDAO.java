@@ -12,6 +12,13 @@ import coupons.core.exceptions.CouponSystemException;
 public class CompaniesDBDAO implements CompaniesDAO {
 
 	private ConnectionPool connectionPool;
+	{
+		try {
+			this.connectionPool = ConnectionPool.getInstance();
+		} catch (CouponSystemException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public boolean isCompanyExists(String email, String password) throws CouponSystemException {
