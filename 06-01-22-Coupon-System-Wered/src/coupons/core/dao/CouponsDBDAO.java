@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import coupons.core.beans.Category;
@@ -381,6 +382,21 @@ public class CouponsDBDAO implements CouponsDAO {
 			throw new CouponSystemException("deleteCouponPurchase failed", e);
 		} finally {
 			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public void deleteExpiredCoupons() throws CouponSystemException {
+		ArrayList<Coupon> coupons = getAllCoupons();
+		for (Coupon coupon : coupons) {
+			if(LocalDate.now().isAfter(coupon.getEndDate()));
+			int id = coupon.getId();
+			if (isCouponPurchaseExists(id)) {
+				deleteCouponPurchase(id);
+				deleteCoupon(id);
+			} else if (isCouponExists(id)){
+				deleteCoupon(id);
+			}
 		}
 	}
 

@@ -9,7 +9,11 @@ import coupons.core.exceptions.CouponSystemException;
 
 public class CompanyFacade extends ClientFacade {
 
-	private int companyId; // equals id entered through login
+	private int companyId;
+
+	public int getCompanyId() {
+		return companyId;
+	}
 
 	public CompanyFacade() {
 	}

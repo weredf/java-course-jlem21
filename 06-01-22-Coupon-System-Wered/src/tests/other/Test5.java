@@ -13,9 +13,9 @@ public class Test5 {
 			CustomersDAO dao = new CustomersDBDAO();
 			try {
 				dao.addCustomer(f);
+				System.out.println("Success");
 			} catch (CouponSystemException e) {
 				System.out.println("Error: " + e.getMessage());
 			}
-			System.out.println("Success");
 	}
 }

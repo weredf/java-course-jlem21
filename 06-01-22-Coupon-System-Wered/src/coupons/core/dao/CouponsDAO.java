@@ -153,4 +153,10 @@ public interface CouponsDAO {
 	 */
 	void deleteCouponPurchase(int couponId) throws CouponSystemException;
 
+	/**
+	 * Delete all expired coupons
+	 * @throws CouponSystemException
+	 */
+	void deleteExpiredCoupons() throws CouponSystemException;
+
 }

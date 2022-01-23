@@ -13,9 +13,9 @@ public class Test4 {
 			CompaniesDAO dao = new CompaniesDBDAO();
 			try {
 				dao.addCompany(c);
+				System.out.println("Success");
 			} catch (CouponSystemException e) {
 				System.out.println("Error: " + e.getMessage());
 			}
-			System.out.println("Success");
 	}
 }

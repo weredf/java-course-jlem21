@@ -13,9 +13,9 @@ public class Test7 {
 				dao2.addCouponPurchase(1, 1);
 				dao2.addCouponPurchase(1, 2);
 				dao2.deleteCouponPurchase(1, 1);
+				System.out.println("Success");
 			} catch (CouponSystemException e) {
 				System.out.println("Error: " + e.getMessage());
 			}
-			System.out.println("Success");
 	}
 }

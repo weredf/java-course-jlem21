@@ -11,7 +11,7 @@ public class Customer {
 	private String lastName;
 	private String email;
 	private String password;
-	private List<Coupon> coupons = new ArrayList<>(); // to do - create list of all coupons that are purchased by customer?
+	private List<Coupon> coupons = new ArrayList<>();
 	
 	 public Customer() {
 	}
@@ -86,6 +86,11 @@ public class Customer {
 		return id == other.id;
 	}
 
-	
-	 
+	public List<Coupon> getCoupons() {
+		return coupons;
+	}
+
+	public void setCoupons(List<Coupon> coupons) {
+		this.coupons = coupons;
+	}
 }

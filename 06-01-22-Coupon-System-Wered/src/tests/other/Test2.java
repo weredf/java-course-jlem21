@@ -14,7 +14,7 @@ public class Test2 {
 			CompaniesDAO dao = new CompaniesDBDAO();
 			int id = dao.addCompany(c);
 			System.out.println("created company: " + id);
-			System.out.println(c);
+			System.out.println(c.toString());
 		} catch (CouponSystemException e) {
 			System.out.println("Error: " + e.getMessage());
 		} finally {

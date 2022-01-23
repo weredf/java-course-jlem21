@@ -10,7 +10,11 @@ import coupons.core.exceptions.CouponSystemException;
 
 public class CustomerFacade extends ClientFacade {
 
-	private int customerId; // equals id entered through login
+	private int customerId;
+
+	public int getCustomerId() {
+		return customerId;
+	}
 
 	public CustomerFacade(int customerId) {
 		super();

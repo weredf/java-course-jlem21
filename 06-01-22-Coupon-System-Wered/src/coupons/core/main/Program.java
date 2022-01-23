@@ -10,8 +10,7 @@ public class Program {
 		try {
 			Test.testAll();
 		} catch (CouponSystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error " + e.getMessage());
 		}
 	}
 
