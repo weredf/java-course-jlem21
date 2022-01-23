@@ -2,6 +2,7 @@ package coupons.core.dao;
 
 import java.util.ArrayList;
 
+import coupons.core.beans.Coupon;
 import coupons.core.beans.Customer;
 import coupons.core.exceptions.CouponSystemException;
 
@@ -72,6 +73,14 @@ public interface CustomersDAO {
 	 * @throws CouponSystemException
 	 */
 	Customer getOneCustomer(int customerId) throws CouponSystemException;
+
+	/**
+	 * @param email
+	 * @param password
+	 * @return Customer
+	 * @throws CouponSystemException
+	 */
+	Customer getOneCustomer(String email, String password) throws CouponSystemException;
 
 
 }

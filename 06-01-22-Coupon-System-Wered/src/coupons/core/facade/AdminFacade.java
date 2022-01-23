@@ -20,6 +20,11 @@ public class AdminFacade extends ClientFacade {
 		return email.equals(this.email) && password.equals(this.password);
 	}
 
+	/**
+	 * Add company after checking values
+	 * @param company
+	 * @throws CouponSystemException
+	 */
 	public void addCompany(Company company) throws CouponSystemException {
 		// check if input is valid
 		if (company.getName() != null && company.getEmail() != null & company.getPassword() != null) {
@@ -35,6 +40,11 @@ public class AdminFacade extends ClientFacade {
 		}
 	}
 
+	/**
+	 * Update company after checking values
+	 * @param company
+	 * @throws CouponSystemException
+	 */
 	public void updateCompany(Company company) throws CouponSystemException {
 		// check if input is valid
 		if (company.getId() != 0 && company.getName() != null) {
@@ -42,7 +52,7 @@ public class AdminFacade extends ClientFacade {
 			if (companiesDAO.isCompanyExists(company.getId(), company.getName())) {
 				// check if input matches - cannot update company Id or name
 				Company c = companiesDAO.getOneCompany(company.getId());
-				if (c.getName() == company.getName()) {
+				if (c.getName().equals(company.getName())) {
 					// check if update input is valid
 					if (company.getEmail() != null && company.getPassword() != null) {
 						// update company
@@ -61,6 +71,11 @@ public class AdminFacade extends ClientFacade {
 		}
 	}
 
+	/**
+	 * Delete company after checking if it exists in relevant tables
+	 * @param companyId
+	 * @throws CouponSystemException
+	 */
 	public void deleteCompany(int companyId) throws CouponSystemException {
 		// check if company exists
 		if (companiesDAO.isCompanyExists(companyId)) {
@@ -86,14 +101,30 @@ public class AdminFacade extends ClientFacade {
 		}
 	}
 
+	/**
+	 * Get all companies from companies database
+	 * @return ArrayList
+	 * @throws CouponSystemException
+	 */
 	public ArrayList<Company> getAllCompanies() throws CouponSystemException {
 		return companiesDAO.getAllCompanies();
 	}
 
+	/**
+	 * Get one company from companies database
+	 * @param companyId
+	 * @return Company
+	 * @throws CouponSystemException
+	 */
 	public Company getOneCompany(int companyId) throws CouponSystemException {
 		return companiesDAO.getOneCompany(companyId);
 	}
 
+	/**
+	 * Add customer after checking if it doesn't exist
+	 * @param customer
+	 * @throws CouponSystemException
+	 */
 	public void addCustomer(Customer customer) throws CouponSystemException {
 		// check if customer doesn't already exist - email
 		if (!customersDAO.isCustomerExists(customer.getEmail(), customer.getPassword())) {
@@ -104,6 +135,11 @@ public class AdminFacade extends ClientFacade {
 		}
 	}
 
+	/**
+	 * Update customer after checking values and exists
+	 * @param customer
+	 * @throws CouponSystemException
+	 */
 	public void updateCustomer(Customer customer) throws CouponSystemException {
 		// check if search input is valid
 		if (customer.getId() != 0) {
@@ -125,6 +161,11 @@ public class AdminFacade extends ClientFacade {
 		}
 	}
 
+	/**
+	 * Delete customer after checking if it exists in relevant tables
+	 * @param customerId
+	 * @throws CouponSystemException
+	 */
 	public void deleteCustomer(int customerId) throws CouponSystemException {
 		// check if customer exists
 		if (customersDAO.isCustomerExists(customerId)) {
@@ -142,10 +183,21 @@ public class AdminFacade extends ClientFacade {
 		}
 	}
 
+	/**
+	 * Get all customers from customers database
+	 * @return ArrayList
+	 * @throws CouponSystemException
+	 */
 	public ArrayList<Customer> getAllCustomers() throws CouponSystemException {
 		return customersDAO.getAllCustomers();
 	}
 
+	/**
+	 * Get one customer from customers database
+	 * @param customerId
+	 * @return Customer
+	 * @throws CouponSystemException
+	 */
 	public Customer getOneCustomer(int customerId) throws CouponSystemException {
 		return customersDAO.getOneCustomer(customerId);
 	}

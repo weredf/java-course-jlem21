@@ -109,4 +109,13 @@ public interface CompaniesDAO {
 	 */
 	Company getOneCompany(int companyId) throws CouponSystemException;
 
+	/**
+	 * Get one company from companies database
+	 * @param email
+	 * @param password
+	 * @return Company
+	 * @throws CouponSystemException
+	 */
+	Company getOneCompany(String email, String password) throws CouponSystemException;
+
 }

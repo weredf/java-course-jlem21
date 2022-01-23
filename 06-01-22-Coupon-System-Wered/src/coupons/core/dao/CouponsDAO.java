@@ -114,7 +114,7 @@ public interface CouponsDAO {
 	ArrayList<Coupon> getAllCouponsInCategoryForCustomer(int customerId, Category category) throws CouponSystemException;
 
 	/**
-	 * Get all coupons for once customer up to max price
+	 * Get all coupons for one customer up to max price
 	 * @param customerId
 	 * @param maxPrice
 	 * @return ArrayList<Coupon>

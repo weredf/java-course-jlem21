@@ -12,7 +12,14 @@ import coupons.core.exceptions.CouponSystemException;
 public class CustomersDBDAO implements CustomersDAO {
 
 	private ConnectionPool connectionPool;
-
+	{
+		try {
+			this.connectionPool = ConnectionPool.getInstance();
+		} catch (CouponSystemException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public boolean isCustomerExists(String email, String password) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
@@ -166,6 +173,28 @@ public class CustomersDBDAO implements CustomersDAO {
 				return cus;
 			} else {
 				throw new CouponSystemException("getOneCustomer " + customerId + " failed - not found");
+			}
+		} catch (SQLException e) {
+			throw new CouponSystemException("getOneCustomer failed", e);
+		} finally {
+			connectionPool.restoreConnection(c);
+		}
+	}
+
+	@Override
+	public Customer getOneCustomer(String email, String password) throws CouponSystemException {
+		Connection c = connectionPool.getConnection();
+		String sql = "select * from customers where email = ? and password = ?";
+		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
+			pstmt.setString(1, email);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Customer cus = new Customer(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+						rs.getString(5));
+				return cus;
+			} else {
+				throw new CouponSystemException("getOneCustomer " + email + " failed - not found");
 			}
 		} catch (SQLException e) {
 			throw new CouponSystemException("getOneCustomer failed", e);

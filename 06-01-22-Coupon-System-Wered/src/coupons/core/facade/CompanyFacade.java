@@ -11,6 +11,9 @@ public class CompanyFacade extends ClientFacade {
 
 	private int companyId; // equals id entered through login
 
+	public CompanyFacade() {
+	}
+	
 	public CompanyFacade(int companyId) {
 		super();
 		this.companyId = companyId;
@@ -18,10 +21,18 @@ public class CompanyFacade extends ClientFacade {
 
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
-		// check if details match row in table companies?
-		return true;
+		if(companiesDAO.isCompanyExists(email, password)) {
+			this.companyId = companiesDAO.getOneCompany(email, password).getId();
+			return true;
+		}
+		return false;
 	}
 
+	/**
+	 * Add coupon after checking values and exists
+	 * @param coupon
+	 * @throws CouponSystemException
+	 */
 	public void addCoupon(Coupon coupon) throws CouponSystemException {
 		// check if input is valid
 		if (coupon.getCompany() != 0 && coupon.getCategory() != null && coupon.getTitle() != null
@@ -40,6 +51,11 @@ public class CompanyFacade extends ClientFacade {
 		}
 	}
 
+	/**
+	 * Update coupon after checking values and exists
+	 * @param coupon
+	 * @throws CouponSystemException
+	 */
 	public void updateCoupon(Coupon coupon) throws CouponSystemException {
 		// check if input is valid
 		if (coupon.getId() != 0 && coupon.getCompany() != 0) {
@@ -68,6 +84,11 @@ public class CompanyFacade extends ClientFacade {
 		}
 	}
 
+	/**
+	 * Delete coupon after checking exists
+	 * @param couponId
+	 * @throws CouponSystemException
+	 */
 	public void deleteCoupon(int couponId) throws CouponSystemException {
 		// check if coupon exists (double check if belongs to companyId?)
 		if (couponsDAO.isCouponExists(couponId)) {
@@ -85,18 +106,40 @@ public class CompanyFacade extends ClientFacade {
 		}
 	}
 
+	/**
+	 * Get all coupons for one company 
+	 * @return ArrayList
+	 * @throws CouponSystemException
+	 */
 	public ArrayList<Coupon> getCompanyCoupons() throws CouponSystemException {
 		return couponsDAO.getAllCouponsForCompany(companyId);
 	}
 
+	/**
+	 * Get all coupons for one company in one category
+	 * @param category
+	 * @return ArrayList
+	 * @throws CouponSystemException
+	 */
 	public ArrayList<Coupon> getCompanyCoupons(Category category) throws CouponSystemException {
 		return couponsDAO.getAllCouponsInCategoryForCompany(companyId, category);
 	}
 
+	/**
+	 * Get all coupons for one company up to max price
+	 * @param maxPrice
+	 * @return ArrayList
+	 * @throws CouponSystemException
+	 */
 	public ArrayList<Coupon> getCompanyCoupons(double maxPrice) throws CouponSystemException {
 		return couponsDAO.getAllCouponsForCompanyMax(companyId, maxPrice);
 	}
 
+	/**
+	 * Get one company from companies database
+	 * @return Company
+	 * @throws CouponSystemException
+	 */
 	public Company getCompanyDetails() throws CouponSystemException {
 		return companiesDAO.getOneCompany(companyId);
 	}

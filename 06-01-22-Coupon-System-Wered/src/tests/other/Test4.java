@@ -3,7 +3,6 @@ package tests.other;
 import coupons.core.beans.Company;
 import coupons.core.dao.CompaniesDAO;
 import coupons.core.dao.CompaniesDBDAO;
-import coupons.core.dao.ConnectionPool;
 import coupons.core.exceptions.CouponSystemException;
 
 public class Test4 {

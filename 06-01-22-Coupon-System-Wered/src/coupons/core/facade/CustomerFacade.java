@@ -17,12 +17,23 @@ public class CustomerFacade extends ClientFacade {
 		this.customerId = customerId;
 	}
 
+	public CustomerFacade() {
+	}
+
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
-		// check if details match row in table customers?
-		return true;
+		if(customersDAO.isCustomerExists(email, password)) {
+			this.customerId = customersDAO.getOneCustomer(email, password).getId();
+			return true;
+		}
+		return false;
 	}
 	
+	/**
+	 * Purchase coupon by customer after checking exists
+	 * @param coupon
+	 * @throws CouponSystemException
+	 */
 	public void purchaseCoupon(Coupon coupon) throws CouponSystemException {
 		// check if coupon already in customers possession
 		if (!couponsDAO.isCouponPurchaseExists(customerId, coupon.getId())) {
@@ -48,18 +59,40 @@ public class CustomerFacade extends ClientFacade {
 		}
 	}
 	
+	/**
+	 * Get all coupons for one customer
+	 * @return ArrayList
+	 * @throws CouponSystemException
+	 */
 	public ArrayList<Coupon> getCustomerCoupons() throws CouponSystemException {
 		return couponsDAO.getAllCouponsForCustomer(customerId);
 	}
 	
+	/**
+	 * Get all coupons for one customer in one category
+	 * @param category
+	 * @return ArrayList
+	 * @throws CouponSystemException
+	 */
 	public ArrayList<Coupon> getCustomerCoupons(Category category) throws CouponSystemException {
 		return couponsDAO.getAllCouponsInCategoryForCustomer(customerId, category);
 	}
 	
+	/**
+	 * Get all coupons for one customer up to max price
+	 * @param maxPrice
+	 * @return ArrayList
+	 * @throws CouponSystemException
+	 */
 	public ArrayList<Coupon> getCustomerCoupons(double maxPrice) throws CouponSystemException {
 		return couponsDAO.getAllCouponsForCustomerMax(customerId, maxPrice);
 	}
 
+	/**
+	 * Get one customer from customers database
+	 * @return ArrayList
+	 * @throws CouponSystemException
+	 */
 	public Customer getCustomerDetails() throws CouponSystemException {
 		return customersDAO.getOneCustomer(customerId);
 	}
