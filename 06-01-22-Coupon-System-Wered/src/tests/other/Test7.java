@@ -10,9 +10,9 @@ public class Test7 {
 
 			CouponsDAO dao2 = new CouponsDBDAO();
 			try {
-				dao2.addCouponPurchase(1, 1);
 				dao2.addCouponPurchase(1, 2);
-				dao2.deleteCouponPurchase(1, 1);
+				dao2.addCouponPurchase(1, 3);
+				dao2.deleteCouponPurchase(1, 2);
 				System.out.println("Success");
 			} catch (CouponSystemException e) {
 				System.out.println("Error: " + e.getMessage());

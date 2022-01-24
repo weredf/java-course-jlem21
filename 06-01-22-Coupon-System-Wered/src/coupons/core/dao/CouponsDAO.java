@@ -26,6 +26,15 @@ public interface CouponsDAO {
 	boolean isCouponExists(int id) throws CouponSystemException;
 
 	/**
+	 * Check if coupon id exists for this company
+	 * @param id
+	 * @param companyId
+	 * @return boolean
+	 * @throws CouponSystemException
+	 */
+	boolean isCouponExists(int id, int companyId) throws CouponSystemException;
+
+	/**
 	 * Check if coupon purchase exists
 	 * @param couponId
 	 * @return boolean
@@ -158,5 +167,6 @@ public interface CouponsDAO {
 	 * @throws CouponSystemException
 	 */
 	void deleteExpiredCoupons() throws CouponSystemException;
+
 
 }

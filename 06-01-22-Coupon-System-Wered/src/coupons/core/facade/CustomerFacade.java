@@ -59,7 +59,7 @@ public class CustomerFacade extends ClientFacade {
 				throw new CouponSystemException("purchaseCoupon " + coupon + " failed - no coupons left");
 			}
 		} else {
-			throw new CouponSystemException("purchaseCoupon " + coupon + " failed - can't buy same coupon twice");
+			throw new CouponSystemException("purchaseCoupon " + coupon + " failed - already have this coupon");
 		}
 	}
 	

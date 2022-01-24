@@ -37,7 +37,7 @@ public class CompanyFacade extends ClientFacade {
 	 * @param coupon
 	 * @throws CouponSystemException
 	 */
-	public void addCoupon(Coupon coupon) throws CouponSystemException {
+	public int addCoupon(Coupon coupon) throws CouponSystemException {
 		// check if input is valid
 		if (coupon.getCompany() != 0 && coupon.getCategory() != null && coupon.getTitle() != null
 				&& coupon.getDescription() != null && coupon.getStartDate() != null && coupon.getEndDate() != null
@@ -45,7 +45,8 @@ public class CompanyFacade extends ClientFacade {
 			// check if coupon title doesn't already exist for this company
 			if (!couponsDAO.isCouponExists(companyId, coupon.getTitle())) {
 				// add coupon
-				couponsDAO.addCoupon(coupon);
+				int id = couponsDAO.addCoupon(coupon);
+				return id;
 			} else {
 				throw new CouponSystemException(
 						"addCoupon " + coupon + " failed - coupon title " + coupon.getTitle() + " already exists");
@@ -62,29 +63,18 @@ public class CompanyFacade extends ClientFacade {
 	 */
 	public void updateCoupon(Coupon coupon) throws CouponSystemException {
 		// check if input is valid
-		if (coupon.getId() != 0 && coupon.getCompany() != 0) {
+		if (coupon.getId() != 0 && coupon.getCompany() != 0 && coupon.getCategory() != null && coupon.getTitle() != null && coupon.getDescription() != null
+				&& coupon.getStartDate() != null && coupon.getEndDate() != null && coupon.getAmount() != 0
+				&& coupon.getPrice() != 0 && coupon.getImage() != null) {
 			// check if coupon exists
-			if (couponsDAO.isCouponExists(coupon.getId())) {
-				// check if input matches - cannot update couponId or companyId
-				Coupon c = couponsDAO.getOneCoupon(coupon.getId());
-				if (c.getCompany() == coupon.getCompany() && c.getCompany() == companyId) {
-					// check if update input is valid
-					if (coupon.getCategory() != null && coupon.getTitle() != null && coupon.getDescription() != null
-							&& coupon.getStartDate() != null && coupon.getEndDate() != null && coupon.getAmount() != 0
-							&& coupon.getPrice() != 0 && coupon.getImage() != null) {
-						// update coupon
-						couponsDAO.updateCoupon(coupon);
-					} else {
-						throw new CouponSystemException("updateCoupon " + coupon + " failed - update input not valid");
-					}
-				} else {
-					throw new CouponSystemException("updateCoupon " + coupon + " failed - can't update id values");
-				}
+			if (couponsDAO.isCouponExists(coupon.getId(), getCompanyId())) {
+				// update coupon
+				couponsDAO.updateCoupon(coupon);
 			} else {
 				throw new CouponSystemException("updateCoupon " + coupon + " failed - coupon doesn't exist");
 			}
 		} else {
-			throw new CouponSystemException("updateCoupon " + coupon + " failed - search input not valid");
+			throw new CouponSystemException("updateCoupon " + coupon + " failed - input not valid");
 		}
 	}
 

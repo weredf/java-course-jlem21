@@ -25,15 +25,16 @@ public class AdminFacade extends ClientFacade {
 	 * @param company
 	 * @throws CouponSystemException
 	 */
-	public void addCompany(Company company) throws CouponSystemException {
+	public int addCompany(Company company) throws CouponSystemException {
 		// check if input is valid
 		if (company.getName() != null && company.getEmail() != null & company.getPassword() != null) {
 			// check if company name doesn't already exist, if email isn't already used
 			if (!companiesDAO.isCompanyExistsNameOrEmail(company.getName(), company.getEmail())) {
 				// add company
-				companiesDAO.addCompany(company);
+				int id = companiesDAO.addCompany(company);
+				return id;
 			} else {
-				throw new CouponSystemException("addCompany failed - company name " + company.getName() + "already exists or email " + company.getEmail() + " already in use");
+				throw new CouponSystemException("addCompany failed - company name " + company.getName() + " already exists or email " + company.getEmail() + " already in use");
 			}
 		} else {
 			throw new CouponSystemException("addCompany failed - input not valid");
@@ -47,27 +48,16 @@ public class AdminFacade extends ClientFacade {
 	 */
 	public void updateCompany(Company company) throws CouponSystemException {
 		// check if input is valid
-		if (company.getId() != 0 && company.getName() != null) {
-			// check if company exists
+		if (company.getId() != 0 && company.getName() != null && company.getEmail() != null && company.getPassword() != null) {
+			// check if company exists - cannot update company Id or name
 			if (companiesDAO.isCompanyExists(company.getId(), company.getName())) {
-				// check if input matches - cannot update company Id or name
-				Company c = companiesDAO.getOneCompany(company.getId());
-				if (c.getName().equals(company.getName())) {
-					// check if update input is valid
-					if (company.getEmail() != null && company.getPassword() != null) {
-						// update company
-						companiesDAO.updateCompany(company);
-					} else {
-						throw new CouponSystemException("updateCompany failed - update input not valid");
-					}
-				} else {
-					throw new CouponSystemException("updateCompany " + company + " failed - can't update id or name");
-				}
+				// update company
+				companiesDAO.updateCompany(company);
 			} else {
 				throw new CouponSystemException("updateCompany failed - company " + company + "doesn't exist");
 			}
 		} else {
-			throw new CouponSystemException("updateCompany failed - search input not valid");
+			throw new CouponSystemException("updateCompany failed - input not valid");
 		}
 	}
 
@@ -125,11 +115,12 @@ public class AdminFacade extends ClientFacade {
 	 * @param customer
 	 * @throws CouponSystemException
 	 */
-	public void addCustomer(Customer customer) throws CouponSystemException {
+	public int addCustomer(Customer customer) throws CouponSystemException {
 		// check if customer doesn't already exist - email
 		if (!customersDAO.isCustomerExists(customer.getEmail(), customer.getPassword())) {
 			// add customer
-			customersDAO.addCustomer(customer);
+			int id = customersDAO.addCustomer(customer);
+			return id;
 		} else {
 			throw new CouponSystemException("addCustomer failed - customer email " + customer.getEmail() + " already in use");
 		}
@@ -142,22 +133,17 @@ public class AdminFacade extends ClientFacade {
 	 */
 	public void updateCustomer(Customer customer) throws CouponSystemException {
 		// check if search input is valid
-		if (customer.getId() != 0) {
+		if (customer.getId() != 0 && customer.getFirstName() != null && customer.getLastName() != null && customer.getEmail() != null
+				&& customer.getPassword() != null) {
 			// check if customer exists
 			if (customersDAO.isCustomerExists(customer.getId())) {
-				// check if update input is valid
-				if (customer.getFirstName() != null && customer.getLastName() != null && customer.getEmail() != null
-						&& customer.getPassword() != null) {
-					// update customer
-					customersDAO.updateCustomer(customer);
-				} else {
-					throw new CouponSystemException("updateCustomer failed - update input not valid");
-				}
+				// update customer
+				customersDAO.updateCustomer(customer);
 			} else {
 				throw new CouponSystemException("updateCustomer failed - customer " + customer + "already exists");
 			}
 		} else {
-			throw new CouponSystemException("updateCustomer failed - search input not valid");
+			throw new CouponSystemException("updateCustomer failed - input not valid");
 		}
 	}
 
