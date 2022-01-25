@@ -35,7 +35,7 @@ public class CouponExpirationDailyJob implements Runnable {
 	public void startDailyJob() {
 		quit = true;
 		this.thread.start();
-		System.out.println("Daily job started");
+		System.out.println(">>> Daily job started");
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class CouponExpirationDailyJob implements Runnable {
 	public void stopDailyJob() {
 		quit = false;
 		this.thread.interrupt();
-		System.out.println("Daily job stopped");
+		System.out.println(">>> Daily job stopped");
 	}
 
 	public Thread getThread() {

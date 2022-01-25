@@ -7,8 +7,6 @@ import coupons.core.beans.Category;
 import coupons.core.beans.Company;
 import coupons.core.beans.Coupon;
 import coupons.core.beans.Customer;
-import coupons.core.dao.CompaniesDAO;
-import coupons.core.dao.CompaniesDBDAO;
 import coupons.core.dao.ConnectionPool;
 import coupons.core.dao.CouponsDAO;
 import coupons.core.dao.CouponsDBDAO;
@@ -23,6 +21,7 @@ import coupons.core.login.LoginManager;
 public class Test {
 
 	public static void testAll() throws CouponSystemException {
+		System.out.println("--- testAll started");
 		CouponExpirationDailyJob job = null;
 		try {
 			CouponsDAO DAO = new CouponsDBDAO();
@@ -33,7 +32,6 @@ public class Test {
 			testCompany(manager);
 			testCustomer(manager);
 		} catch (Exception e) {
-			// throw new CouponSystemException("testAll failed - ", e);
 			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace();
 
@@ -55,9 +53,8 @@ public class Test {
 	}
 
 	private static void testAdmin(LoginManager manager) throws CouponSystemException {
-		System.out.println("testAdmin started");
+		System.out.println("--- testAdmin started");
 		AdminFacade adminFacade = (AdminFacade) manager.login("admin@admin.com", "admin", ClientType.ADMINISTRATOR);
-//		CompaniesDAO DAO = new CompaniesDBDAO();
 		Company company = new Company(0, "hhh", "hhh@mail.com", "hhhPass");
 		Company c = new Company(0, "BBB", "bbb@mail.com", "bbbPass");
 		company.setId(adminFacade.addCompany(company));
@@ -90,7 +87,7 @@ public class Test {
 	}
 
 	private static void testCompany(LoginManager manager) throws CouponSystemException {
-		System.out.println("testCompany started");
+		System.out.println("--- testCompany started");
 		CompanyFacade companyFacade = (CompanyFacade) manager.login("HHH@mail.com", "HHHPASS", ClientType.COMPANY);
 		if (companyFacade != null) {
 			System.out.println("Company login success");
@@ -123,7 +120,7 @@ public class Test {
 	}
 
 	private static void testCustomer(LoginManager manager) throws CouponSystemException {
-		System.out.println("testCustomer started");
+		System.out.println("--- testCustomer started");
 		CustomerFacade customerFacade1 = (CustomerFacade) manager.login("fff@mail.com", "fffPass", ClientType.CUSTOMER);
 		if (customerFacade1 == null) {
 			System.out.println("Customer login failed");
