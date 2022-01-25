@@ -29,7 +29,7 @@ public class CouponsDBDAO implements CouponsDAO {
 		String sql = "select * from coupons where company_id = ? and title = ?";
 		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
 			pstmt.setInt(1, companyId);
-			pstmt.setString(1, title);
+			pstmt.setString(2, title);
 			ResultSet rs = pstmt.executeQuery();
 			return rs.next();
 		} catch (SQLException e) {
@@ -262,7 +262,7 @@ public class CouponsDBDAO implements CouponsDAO {
 	@Override
 	public ArrayList<Coupon> getAllCouponsForCustomer(int customerId) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
-		String sql = "select * from coupons where coupon_id in (select id from customers_vs_coupons values where customer_id = ?)";
+		String sql = "select * from coupons where id in (select coupon_id from customers_vs_coupons where customer_id = ?)";
 		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
 			pstmt.setInt(1, customerId);
 			ResultSet rs = pstmt.executeQuery();
@@ -285,7 +285,7 @@ public class CouponsDBDAO implements CouponsDAO {
 	public ArrayList<Coupon> getAllCouponsInCategoryForCustomer(int customerId, Category category)
 			throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
-		String sql = "select * from coupons where coupon_id in (select id from customers_vs_coupons values where customer_id = ?) and category = ?";
+		String sql = "select * from coupons where id in (select coupon_id from customers_vs_coupons where customer_id = ?) and category = ?";
 		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
 			pstmt.setInt(1, customerId);
 			pstmt.setString(2, category.toString());
@@ -308,7 +308,7 @@ public class CouponsDBDAO implements CouponsDAO {
 	@Override
 	public ArrayList<Coupon> getAllCouponsForCustomerMax(int customerId, double maxPrice) throws CouponSystemException {
 		Connection c = connectionPool.getConnection();
-		String sql = "select * from coupons where coupon_id in (select id from customers_vs_coupons values where customer_id = ?) and price < ?";
+		String sql = "select * from coupons where id in (select coupon_id from customers_vs_coupons where customer_id = ?) and price < ?";
 		try (PreparedStatement pstmt = c.prepareStatement(sql)) {
 			pstmt.setInt(1, customerId);
 			pstmt.setDouble(2, maxPrice);
