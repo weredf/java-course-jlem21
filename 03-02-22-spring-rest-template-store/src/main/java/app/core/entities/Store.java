@@ -1,44 +1,46 @@
 package app.core.entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "coupons")
+@EqualsAndHashCode(of = "id")
+@ToString(exclude = "items")
 @Entity
-public class Company {
+public class Store {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@Column(unique = true)
 	private String name;
-	@Column(unique = true)
-	private String email;
-	private String password;
-	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	private List<Coupon> coupons = new ArrayList<>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "store", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Item> items;
 
-	public void addCoupon(Coupon coupon) {
-		if (this.coupons == null) {
-			this.coupons = new ArrayList<>();
+	public void setItems(List<Item> items) { // necessary because store isn't owner of relationship
+		for (Item item : items) {
+			item.setStore(this);
 		}
-		coupon.setCompany(this);
-		this.coupons.add(coupon);
+		this.items = items;
 	}
+	
+	
 }
