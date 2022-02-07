@@ -1,16 +1,18 @@
 package app.core.login;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import app.core.exceptions.CouponSystemException;
-import app.core.services.AdminService;
 import app.core.services.ClientService;
-import app.core.services.CompanyService;
-import app.core.services.CustomerService;
 
-
+@Component
+@Scope("singleton")
 public class LoginManager {
 
+	private ApplicationContext ctx;
+	/*
 	@Autowired
 	private static LoginManager instance = new LoginManager();
 	
@@ -20,25 +22,24 @@ public class LoginManager {
 	public static LoginManager getInstance() {
 		return instance;
 	}
-	
+	*/
 	public ClientService login(String email, String password, ClientType clientType) throws CouponSystemException {
-		// check if entered login values are correct users according to client type
 		if (clientType == ClientType.ADMINISTRATOR) {
-			ClientService admin = new AdminService();
+			ClientService admin = ctx.getBean("adminService", ClientService.class);
 			if (admin.login(email, password)) {
 				return admin;
 			} else {
 				return null;
 			}
 		} else if (clientType == ClientType.COMPANY) {
-			ClientService comp = new CompanyService();
+			ClientService comp = ctx.getBean("companyService", ClientService.class);
 			if (comp.login(email, password)) {
 				return comp;
 			} else {
 				return null;
 			}
 		} else if (clientType == ClientType.CUSTOMER) {
-			ClientService cust = new CustomerService();
+			ClientService cust = ctx.getBean("customerService", ClientService.class);
 			if (cust.login(email, password)) {
 				return cust;
 			} else {

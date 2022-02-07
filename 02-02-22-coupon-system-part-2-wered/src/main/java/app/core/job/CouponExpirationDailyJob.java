@@ -2,13 +2,19 @@ package app.core.job;
 
 import java.util.concurrent.TimeUnit;
 
-import app.core.repos.CouponRepo;
-import app.core.exceptions.CouponSystemException;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import app.core.exceptions.CouponSystemException;
+import app.core.repos.CouponRepo;
+
+@Component
+@Scope("singleton")
 public class CouponExpirationDailyJob implements Runnable {
 
-	private static CouponExpirationDailyJob instance = new CouponExpirationDailyJob(couponRepo);
-	
 	private CouponRepo couponRepo;
 	private boolean quit;
 	private Thread thread = new Thread(this, "daily_job");
@@ -32,6 +38,7 @@ public class CouponExpirationDailyJob implements Runnable {
 	/**
 	 * Start Daily Job Thread, boolean
 	 */
+	@PostConstruct
 	public void startDailyJob() {
 		quit = true;
 		this.thread.start();
@@ -41,6 +48,7 @@ public class CouponExpirationDailyJob implements Runnable {
 	/**
 	 * Stop Daily Job Thread, boolean
 	 */
+	@PreDestroy
 	public void stopDailyJob() {
 		quit = false;
 		this.thread.interrupt();

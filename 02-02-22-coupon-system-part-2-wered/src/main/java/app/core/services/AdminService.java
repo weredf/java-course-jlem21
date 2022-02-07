@@ -1,18 +1,25 @@
 package app.core.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import app.core.entities.Company;
+import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 
 @Service
 @Transactional
 @PropertySource("admin.properties")
+@Scope("singleton")
 public class AdminService extends ClientService{
-	// singleton?
+
 	@Value("${email}")
 	private String email;
 	@Value("${password}")
@@ -21,6 +28,85 @@ public class AdminService extends ClientService{
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
 		return email.equals(this.email) && password.equals(this.password);
+	}
+	
+	public int addCompany(Company company) throws CouponSystemException{
+		if (!companyRepo.existsByEmail(company.getEmail())) {
+			return companyRepo.save(company).getId();
+		} else {
+			throw new CouponSystemException("addCompany failed - email already exist");
+		}
+	}
+	
+	public void updateCompany(Company company) throws CouponSystemException {
+		Optional<Company> opt = companyRepo.findById(company.getId());
+		if (opt.isPresent()) {
+			companyRepo.save(company);
+		} else {
+			throw new CouponSystemException("updateCompany failed - company doesn't exist");
+		}
+	}
+	
+	public void deleteCompany(int companyId) throws CouponSystemException {
+		Optional<Company> opt = companyRepo.findById(companyId);
+		if(opt.isPresent()) {
+			companyRepo.deleteById(companyId);
+		} else {
+			throw new CouponSystemException("deleteCompany failed - company doesn't exist");
+		}
+	}
+	
+	public List<Company> getAllCompanies() {
+		List<Company> companies = companyRepo.findAll();
+		return companies;
+	}
+	
+	public Company getOneCompany(int companyId) throws CouponSystemException {
+		Optional<Company> opt = companyRepo.findById(companyId);
+		if (opt.isPresent()) {
+			return opt.get();
+		} else {
+			 throw new CouponSystemException("getOneCompany failed - company doesn't exist");
+		}
+	}
+	
+	public void addCustomer (Customer customer) throws CouponSystemException {
+		if (!customerRepo.existsByEmail(customer.getEmail())) {
+			customerRepo.save(customer);
+		} else {
+			throw new CouponSystemException("addCustomer failed - email already exist");
+		}
+	}
+	
+	public void updateCustomer (Customer customer) throws CouponSystemException {
+		Optional<Customer> opt = customerRepo.findById(customer.getId());
+		if (opt.isPresent()) {
+			customerRepo.save(customer);
+		} else {
+			throw new CouponSystemException("updateCustomer failed - customer doesn't exist");
+		}
+	}
+	
+	public void deleteCustomer (int customerId) throws CouponSystemException {
+		if (customerRepo.existsById(customerId)) {
+			customerRepo.deleteById(customerId);
+		} else {
+			throw new CouponSystemException("deleteCustomer failed - customer doesn't exist");
+		}
+	}
+	
+	public List<Customer> getAllCustomers() {
+		List<Customer> customers = customerRepo.findAll();
+		return customers;
+	}
+	
+	public Customer getOneCustomer(int customerId) throws CouponSystemException {
+		Optional<Customer> opt = customerRepo.findById(customerId);
+		if (opt.isPresent()) {
+			return opt.get();
+		} else {
+			 throw new CouponSystemException("getOneCustomer failed - customer doesn't exist");
+		}
 	}
 
 }

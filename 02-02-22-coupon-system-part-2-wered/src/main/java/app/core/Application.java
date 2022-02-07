@@ -1,6 +1,7 @@
 package app.core;
 
 import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +22,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(Application.class, args);
-		
+		/*
 		{
 			CompanyRepo companyRepo = ctx.getBean(CompanyRepo.class);
 			CustomerRepo customerRepo = ctx.getBean(CustomerRepo.class);
@@ -42,6 +43,14 @@ public class Application {
 				Boolean login = adminService.login("admin@admin.com", "admin");
 				System.out.println(login);
 			} catch (CouponSystemException e) {
+				e.printStackTrace();
+			}
+		}
+		*/
+		{
+			try {
+				TimeUnit.SECONDS.sleep(20);
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}

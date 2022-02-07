@@ -23,7 +23,7 @@ public class Test {
 	public static Test getInstance() {
 		return instance;
 	}
-	
+	/*
 	public static void testAll() throws CouponSystemException {
 		System.out.println("--- testAll started");
 		CouponExpirationDailyJob job = null;
@@ -149,5 +149,6 @@ public class Test {
 		}
 		System.out.println("testCustomer End ========");
 	}
+	*/
 
 }
