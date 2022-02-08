@@ -1,6 +1,7 @@
 package app.core.services;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -61,20 +62,26 @@ public class CompanyService extends ClientService{
 		}
 	}
 	
-	public ArrayList<Coupon> getCompanyCoupons() throws CouponSystemException {
-		ArrayList<Coupon> coupons = couponRepo.findByCompany(getCompanyDetails());
+	public List<Coupon> getCompanyCoupons() throws CouponSystemException {
+		List<Coupon> coupons = couponRepo.findByCompany(getCompanyDetails());
 		return coupons;
 		
 	}
 
-	public ArrayList<Coupon> getCompanyCoupons(Category category) throws CouponSystemException {
-		ArrayList<Coupon> coupons = couponRepo.findByCompanyAndCategory(getCompanyDetails(), category);
+	public List<Coupon> getCompanyCoupons(Category category) throws CouponSystemException {
+		List<Coupon> coupons = couponRepo.findByCompanyAndCategory(getCompanyDetails(), category);
 		return coupons;
 		
 	}
 
-	public ArrayList<Coupon> getCompanyCoupons(double maxPrice) throws CouponSystemException {
-		ArrayList<Coupon> coupons = couponRepo.findByCompanyAndPrice(getCompanyDetails(), maxPrice);
+	public List<Coupon> getCompanyCoupons(double maxPrice) throws CouponSystemException {
+		List<Coupon> companyCoupons = getCompanyCoupons();
+		List<Coupon> coupons = new ArrayList<>();
+			for (Coupon coupon : companyCoupons) {
+				if(coupon.getPrice() <= maxPrice) {
+					coupons.add(coupon);
+				}
+			}
 		return coupons;
 		
 	}

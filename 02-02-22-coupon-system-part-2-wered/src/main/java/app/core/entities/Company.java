@@ -32,7 +32,7 @@ public class Company {
 	private String email;
 	private String password;
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	private List<Coupon> coupons = new ArrayList<>();
+	private List<Coupon> coupons;
 
 	public void addCoupon(Coupon coupon) {
 		if (this.coupons == null) {

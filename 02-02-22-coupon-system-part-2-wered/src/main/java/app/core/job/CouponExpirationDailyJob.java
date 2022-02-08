@@ -1,5 +1,7 @@
 package app.core.job;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -8,7 +10,7 @@ import javax.annotation.PreDestroy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import app.core.exceptions.CouponSystemException;
+import app.core.entities.Coupon;
 import app.core.repos.CouponRepo;
 
 @Component
@@ -26,10 +28,15 @@ public class CouponExpirationDailyJob implements Runnable {
 	public void run(){
 		while(!quit) {
 			try {
-				couponRepo.deleteExpiredCoupons();
+				List<Coupon> coupons = couponRepo.findAll();
+				for (Coupon coupon : coupons) {
+					if(LocalDate.now().isAfter(coupon.getEndDate())) {
+						couponRepo.delete(coupon);
+					}
+				}
 				System.out.println("All expired coupons deleted");
 				TimeUnit.DAYS.sleep(1);
-			} catch (CouponSystemException | InterruptedException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
