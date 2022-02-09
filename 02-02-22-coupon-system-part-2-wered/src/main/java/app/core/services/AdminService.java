@@ -16,13 +16,13 @@ import app.core.exceptions.CouponSystemException;
 
 @Service
 @Transactional
-@PropertySource("admin.properties")
+@PropertySource("application.properties")
 @Scope("singleton")
 public class AdminService extends ClientService{
 
-	@Value("${email}")
+	@Value("${admin.email}")
 	private String email;
-	@Value("${password}")
+	@Value("${admin.password}")
 	private String password;
 	
 	@Override

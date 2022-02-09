@@ -35,7 +35,7 @@ public class CompanyService extends ClientService{
 	
 	public int addCoupon (Coupon coupon) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findById(coupon.getCompany().getId());
-		if (opt.isPresent()) {
+		if (opt.isEmpty()) {
 			Company company = companyRepo.save(coupon.getCompany());
 			company.addCoupon(coupon);
 			return coupon.getId();

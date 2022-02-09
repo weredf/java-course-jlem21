@@ -40,9 +40,6 @@ public class Coupon {
 	private int amount;
 	private double price;
 	private String image;
-	@ManyToOne
-	@JoinColumn(name = "customer_id")
-	private Customer customer;
 	@ManyToMany//(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinTable(name = "customer_vs_coupon", joinColumns = @JoinColumn(name = "coupon_id"), inverseJoinColumns = @JoinColumn(name = "customer_id"))
 	private List<Customer> customers;

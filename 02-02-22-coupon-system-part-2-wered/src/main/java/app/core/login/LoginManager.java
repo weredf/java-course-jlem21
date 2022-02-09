@@ -1,5 +1,6 @@
 package app.core.login;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,18 +12,9 @@ import app.core.services.ClientService;
 @Scope("singleton")
 public class LoginManager {
 
-	private ApplicationContext ctx;
-	/*
 	@Autowired
-	private static LoginManager instance = new LoginManager();
+	private ApplicationContext ctx;
 	
-	private LoginManager() {
-	}
-
-	public static LoginManager getInstance() {
-		return instance;
-	}
-	*/
 	public ClientService login(String email, String password, ClientType clientType) throws CouponSystemException {
 		if (clientType == ClientType.ADMINISTRATOR) {
 			ClientService admin = ctx.getBean("adminService", ClientService.class);

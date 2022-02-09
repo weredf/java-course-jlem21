@@ -16,13 +16,8 @@ public interface CouponRepo extends JpaRepository<Coupon, Integer> {
 
 	List<Coupon> findByCompanyAndCategory(Company company, Category category) throws CouponSystemException;
 
-	// look up how to define up to max
-	List<Coupon> findByCompanyAndPrice(Company company, double maxPrice) throws CouponSystemException;
+	List<Coupon> findByCustomerId(int customerId) throws CouponSystemException;
 
-	List<Coupon> findByCustomer(Customer customer) throws CouponSystemException;
+	List<Coupon> findByCustomerAndCategory(int customerId, Category category) throws CouponSystemException;
 
-	List<Coupon> findByCustomerAndCategory(Customer customerDetails, Category category) throws CouponSystemException;
-
-	
-	
 }

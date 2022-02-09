@@ -31,17 +31,17 @@ public class CustomerService extends ClientService{
 	}
 	
 	public void purchaseCoupon(Coupon coupon) {
-		getCustomerDetails().addCoupon(coupon); // also in coupon, add customer?
+		getCustomerDetails().addCoupon(coupon);
 	}
 	
 	public List<Coupon> getCustomerCoupons() throws CouponSystemException {
-		List<Coupon> coupons = couponRepo.findByCustomer(getCustomerDetails());
+		List<Coupon> coupons = couponRepo.findByCustomerId(customerId);
 		return coupons;
 		
 	}
 
 	public List<Coupon> getCustomerCoupons(Category category) throws CouponSystemException {
-		List<Coupon> coupons = couponRepo.findByCustomerAndCategory(getCustomerDetails(), category);
+		List<Coupon> coupons = couponRepo.findByCustomerAndCategory(customerId, category);
 		return coupons;
 		
 	}
