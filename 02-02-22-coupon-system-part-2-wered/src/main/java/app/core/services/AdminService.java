@@ -16,8 +16,6 @@ import app.core.exceptions.CouponSystemException;
 
 @Service
 @Transactional
-@PropertySource("application.properties")
-@Scope("singleton")
 public class AdminService extends ClientService{
 
 	@Value("${admin.email}")

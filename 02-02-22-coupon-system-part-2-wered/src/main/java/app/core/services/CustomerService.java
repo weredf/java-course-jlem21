@@ -35,26 +35,38 @@ public class CustomerService extends ClientService{
 	}
 	
 	public List<Coupon> getCustomerCoupons() throws CouponSystemException {
-		List<Coupon> coupons = couponRepo.findByCustomerId(customerId);
-		return coupons;
+		List<Coupon> coupons = couponRepo.findAll();
+		List<Coupon> customerCoupons = new ArrayList<>();
+		for (Coupon coupon : coupons) {
+			if(coupon.getId() == customerId) {
+				customerCoupons.add(coupon);
+			}
+		}
+		return customerCoupons;
 		
 	}
 
 	public List<Coupon> getCustomerCoupons(Category category) throws CouponSystemException {
-		List<Coupon> coupons = couponRepo.findByCustomerAndCategory(customerId, category);
-		return coupons;
+		List<Coupon> coupons = getCustomerCoupons();
+		List<Coupon> categoryCoupons = new ArrayList<>();
+		for (Coupon coupon : coupons) {
+			if(coupon.getCategory().equals(category)) {
+				categoryCoupons.add(coupon);
+			}
+		}
+		return categoryCoupons;
 		
 	}
 
 	public List<Coupon> getCustomerCoupons(double maxPrice) throws CouponSystemException {
-		List<Coupon> customerCoupons = getCustomerCoupons();
-		List<Coupon> coupons = new ArrayList<>();
-			for (Coupon coupon : customerCoupons) {
+		List<Coupon> coupons = getCustomerCoupons();
+		List<Coupon> maxCoupons = new ArrayList<>();
+			for (Coupon coupon : coupons) {
 				if(coupon.getPrice() <= maxPrice) {
-					coupons.add(coupon);
+					maxCoupons.add(coupon);
 				}
 			}
-		return coupons;
+		return maxCoupons;
 		
 	}
 	

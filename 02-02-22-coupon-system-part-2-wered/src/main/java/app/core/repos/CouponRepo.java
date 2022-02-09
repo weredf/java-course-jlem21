@@ -16,8 +16,4 @@ public interface CouponRepo extends JpaRepository<Coupon, Integer> {
 
 	List<Coupon> findByCompanyAndCategory(Company company, Category category) throws CouponSystemException;
 
-	List<Coupon> findByCustomerId(int customerId) throws CouponSystemException;
-
-	List<Coupon> findByCustomerAndCategory(int customerId, Category category) throws CouponSystemException;
-
 }
