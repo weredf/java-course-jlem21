@@ -32,9 +32,13 @@ public class Application {
 			AdminService adminService = (AdminService) loginManager.login("admin@admin.com", "admin",
 					ClientType.ADMINISTRATOR);
 			if (adminService != null) {
-				System.out.println("aaaaa");
-//				adminService.addCompany(null);
-//				adminService.getAllCompanies();
+				adminService.addCompany(new Company(0, "AAA", "aaa@mail.com", "aaaPass", null));
+				adminService.getOneCompany(1);
+				adminService.addCompany(new Company(0, "BBB", "bbb@mail.com", "bbbPass", null));
+				adminService.updateCompany(new Company(2, "CCC", "ccc@mail.com", "cccPass", null));
+				System.out.println(adminService.getAllCompanies());
+				adminService.deleteCompany(2);
+				// add customer etc.
 			} else {
 				System.out.println("login failed");
 			}
