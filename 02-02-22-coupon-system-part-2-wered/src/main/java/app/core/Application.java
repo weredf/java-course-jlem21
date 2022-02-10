@@ -42,16 +42,21 @@ public class Application {
 			} else {
 				System.out.println("login failed");
 			}
-			/*
-			CompanyService companyService = (CompanyService) loginManager.login(null, null, ClientType.COMPANY);
+			
+			CompanyService companyService = (CompanyService) loginManager.login("aaa@mail.com", "aaaPass", ClientType.COMPANY);
 			if (companyService != null) {
 				System.out.println("logged in as company id: " + companyService.getCompanyDetails().getId());
-				companyService.addCoupon(null);
-				companyService.getCompanyCoupons(null);
+				companyService.addCoupon(new Coupon(0, companyService.getCompanyDetails(), Category.FOOD, "10%", "10% discount on food", LocalDate.of(2021, 3, 1), LocalDate.of(2022, 5, 1), 5, 10.9, "image", null));
+				System.out.println(companyService.getCompanyCoupons(11));
+				// use other methods
 			} else {
 				System.out.println("login failed");
 			}
-			*/
+			
+			{
+				// add customer service
+			}
+			
 		} catch (CouponSystemException e) {
 			e.printStackTrace();
 		}
@@ -69,10 +74,6 @@ public class Application {
 		 * customer.addCoupon(coupon); coupon.addCustomer(customer);
 		 * couponRepo.save(coupon); customerRepo.save(customer);
 		 * companyRepo.save(company); }
-		 * 
-		 * { ClientService adminService = new AdminService(); try { Boolean login =
-		 * adminService.login("admin@admin.com", "admin"); System.out.println(login); }
-		 * catch (CouponSystemException e) { e.printStackTrace(); } }
 		 */
 		{
 			try {

@@ -2,6 +2,7 @@ package app.core.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -30,8 +31,21 @@ public class CustomerService extends ClientService{
 		}
 	}
 	
-	public void purchaseCoupon(Coupon coupon) {
-		getCustomerDetails().addCoupon(coupon);
+	// add check - no double coupon purchases, amount not 0, not expired (job takes care of this?)
+	// after purchase: amount -1
+	public void purchaseCoupon(Coupon coupon) throws CouponSystemException {
+		Optional<Coupon> opt = couponRepo.findByCustomerId(customerId);
+		if(opt.isEmpty()) {
+			Coupon couponDb = couponRepo.findById(coupon.getId()).get();
+			int amount = couponDb.getAmount();
+			if(amount != 0) {
+				getCustomerDetails().addCoupon(coupon);
+				coupon.setAmount(amount--);
+				couponRepo.save(coupon); //?
+			}
+			
+			
+		}
 	}
 	
 	public List<Coupon> getCustomerCoupons() throws CouponSystemException {

@@ -36,6 +36,7 @@ public class AdminService extends ClientService{
 		}
 	}
 	
+	// add check - no updating name
 	public void updateCompany(Company company) throws CouponSystemException {
 		Optional<Company> opt = companyRepo.findById(company.getId());
 		if (opt.isPresent()) {

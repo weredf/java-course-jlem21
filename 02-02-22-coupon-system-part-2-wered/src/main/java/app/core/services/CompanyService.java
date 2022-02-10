@@ -1,6 +1,5 @@
 package app.core.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +20,10 @@ public class CompanyService extends ClientService{
 
 	private int companyId;
 	
+	// to change
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
-		Optional<Company> opt = Optional.of(companyRepo.findByEmailAndPassword(email, password));
+		Optional<Company> opt = companyRepo.findByEmailAndPassword(email, password);
 		if (opt.isPresent()) {
 			this.companyId = opt.get().getId();
 			return true;
@@ -34,7 +34,7 @@ public class CompanyService extends ClientService{
 	}
 	
 	public int addCoupon (Coupon coupon) throws CouponSystemException {
-		Optional<Coupon> opt = couponRepo.findById(coupon.getCompany().getId());
+		Optional<Coupon> opt = couponRepo.findByCompanyIdAndTitle(coupon.getCompany().getId(), coupon.getTitle());
 		if (opt.isEmpty()) {
 			Company company = companyRepo.save(coupon.getCompany());
 			company.addCoupon(coupon);
@@ -44,10 +44,12 @@ public class CompanyService extends ClientService{
 		}
 	}
 	
+	// add check - no updating company?
 	public void updateCoupon (Coupon coupon) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findById(coupon.getId());
 		if(opt.isPresent()) {
 			couponRepo.save(coupon);
+			// addCoupon like above?
 		} else {
 			throw new CouponSystemException("updateCoupon failed - coupon " + coupon.getId() + " doesn't exist");
 		}
@@ -71,19 +73,11 @@ public class CompanyService extends ClientService{
 	public List<Coupon> getCompanyCoupons(Category category) throws CouponSystemException {
 		List<Coupon> coupons = couponRepo.findByCompanyAndCategory(getCompanyDetails(), category);
 		return coupons;
-		
 	}
 
 	public List<Coupon> getCompanyCoupons(double maxPrice) throws CouponSystemException {
-		List<Coupon> companyCoupons = getCompanyCoupons();
-		List<Coupon> coupons = new ArrayList<>();
-			for (Coupon coupon : companyCoupons) {
-				if(coupon.getPrice() <= maxPrice) {
-					coupons.add(coupon);
-				}
-			}
+		List<Coupon> coupons = couponRepo.findByPriceLessThanEqualAndCompany(maxPrice, getCompanyDetails());
 		return coupons;
-		
 	}
 	
 	public Company getCompanyDetails() {

@@ -33,7 +33,7 @@ public class Customer {
 	@Column(unique = true)
 	private String email;
 	private String password;
-	@ManyToMany//(cascade =  { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@ManyToMany
 	@JoinTable(name = "customer_vs_coupon", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "coupon_id"))
 	private List<Coupon> coupons;
 	
