@@ -1,28 +1,11 @@
 package app.core.tests;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import org.springframework.stereotype.Component;
 
-import app.core.entities.Category;
-import app.core.entities.Company;
-import app.core.entities.Coupon;
-import app.core.entities.Customer;
-import app.core.repos.CouponRepo;
-import app.core.exceptions.CouponSystemException;
-import app.core.services.AdminService;
-import app.core.services.CompanyService;
-import app.core.services.CustomerService;
-import app.core.job.CouponExpirationDailyJob;
-import app.core.login.ClientType;
-import app.core.login.LoginManager;
-
+@Component
 public class Test {
 
-	private static Test instance = new Test();
-
-	public static Test getInstance() {
-		return instance;
-	}
+	
 	/*
 	public static void testAll() throws CouponSystemException {
 		System.out.println("--- testAll started");

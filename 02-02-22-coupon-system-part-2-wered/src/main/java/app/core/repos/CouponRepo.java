@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import app.core.entities.Category;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
-import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 
 public interface CouponRepo extends JpaRepository<Coupon, Integer> {
@@ -58,10 +57,37 @@ public interface CouponRepo extends JpaRepository<Coupon, Integer> {
 	Optional<Coupon> findByCompanyIdAndTitle(Integer companyId, String title) throws CouponSystemException;
 
 	/**
-	 * Found coupon purchase for this customer
+	 * Find all coupons for this customer
+	 * @param customerId
+	 * @return list of coupons of one customer
+	 * @throws CouponSystemException
+	 */
+	List<Coupon> findByCustomersId(int customerId) throws CouponSystemException;
+
+	/**
+	 * Find coupon purchase for this customer
+	 * @param id
 	 * @param customerId
 	 * @return coupon with given customer id if purchased or Optional#empty() if none found
 	 * @throws CouponSystemException
 	 */
-	Optional<Coupon> findByCustomerId(int customerId) throws CouponSystemException;
+	Optional<Coupon> findByIdAndCustomersId(int id, int customerId) throws CouponSystemException;
+
+	/**
+	 * Find all coupons for one customer in specific category
+	 * @param category
+	 * @param customerId
+	 * @return list of coupons of one customer and category
+	 * @throws CouponSystemException
+	 */
+	List<Coupon> findByCategoryAndCustomersId(Category category, int customerId) throws CouponSystemException;
+
+	/**
+	 * Find all coupons for one customer up to maxPrice
+	 * @param maxPrice
+	 * @param customerId
+	 * @return list of coupons of only one customer and up to maxPrice
+	 * @throws CouponSystemException
+	 */
+	List<Coupon> findByPriceLessThanEqualAndCustomersId(double maxPrice, int customerId) throws CouponSystemException;
 }

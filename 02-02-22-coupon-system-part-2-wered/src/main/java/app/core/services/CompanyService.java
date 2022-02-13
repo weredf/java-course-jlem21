@@ -81,7 +81,7 @@ public class CompanyService extends ClientService{
 	}
 	
 	public Company getCompanyDetails() {
-		return companyRepo.getById(companyId);
+		return companyRepo.findById(companyId).get();
 		
 	}
 }

@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import app.core.repos.CouponRepo;
 @Scope("singleton")
 public class CouponExpirationDailyJob implements Runnable {
 
+	@Autowired
 	private CouponRepo couponRepo;
 	private boolean quit;
 	private Thread thread = new Thread(this, "daily_job");
@@ -26,6 +28,7 @@ public class CouponExpirationDailyJob implements Runnable {
 
 	@Override
 	public void run(){
+		System.out.println(">>> Daily job running");
 		while(!quit) {
 			try {
 				List<Coupon> coupons = couponRepo.findAll();

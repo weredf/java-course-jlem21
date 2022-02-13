@@ -1,6 +1,5 @@
 package app.core.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,58 +33,44 @@ public class CustomerService extends ClientService{
 	// add check - no double coupon purchases, amount not 0, not expired (job takes care of this?)
 	// after purchase: amount -1
 	public void purchaseCoupon(Coupon coupon) throws CouponSystemException {
-		Optional<Coupon> opt = couponRepo.findByCustomerId(customerId);
-		if(opt.isEmpty()) {
-			Coupon couponDb = couponRepo.findById(coupon.getId()).get();
-			int amount = couponDb.getAmount();
-			if(amount != 0) {
-				getCustomerDetails().addCoupon(coupon);
-				coupon.setAmount(amount--);
-				couponRepo.save(coupon); //?
-			}
-			
-			
+		Optional<Coupon> opt1 = couponRepo.findByIdAndCustomersId(coupon.getId(), customerId);
+		if(opt1.isEmpty()) {
+			Optional<Coupon> opt2 = couponRepo.findById(coupon.getId());
+			if(opt2.isPresent()) {
+				coupon = opt2.get();
+				int amount = coupon.getAmount();
+				if(amount > 0) {
+					getCustomerDetails().addCoupon(coupon);
+					coupon.setAmount(amount--);
+					couponRepo.save(coupon); //?
+				} else throw new CouponSystemException("purchaseCoupon failed - coupon amount finished");
+			} else throw new CouponSystemException("purchaseCoupon failed - coupon doesn't exist");
+		} else {
+			throw new CouponSystemException("purchaseCoupon failed - coupon already purchased");
 		}
 	}
 	
 	public List<Coupon> getCustomerCoupons() throws CouponSystemException {
-		List<Coupon> coupons = couponRepo.findAll();
-		List<Coupon> customerCoupons = new ArrayList<>();
-		for (Coupon coupon : coupons) {
-			if(coupon.getId() == customerId) {
-				customerCoupons.add(coupon);
-			}
-		}
-		return customerCoupons;
+		List<Coupon> coupons = couponRepo.findByCustomersId(customerId);
+		return coupons;
 		
 	}
 
 	public List<Coupon> getCustomerCoupons(Category category) throws CouponSystemException {
-		List<Coupon> coupons = getCustomerCoupons();
-		List<Coupon> categoryCoupons = new ArrayList<>();
-		for (Coupon coupon : coupons) {
-			if(coupon.getCategory().equals(category)) {
-				categoryCoupons.add(coupon);
-			}
-		}
-		return categoryCoupons;
+		List<Coupon> coupons = couponRepo.findByCategoryAndCustomersId(category, customerId);
+		return coupons;
 		
 	}
 
 	public List<Coupon> getCustomerCoupons(double maxPrice) throws CouponSystemException {
-		List<Coupon> coupons = getCustomerCoupons();
-		List<Coupon> maxCoupons = new ArrayList<>();
-			for (Coupon coupon : coupons) {
-				if(coupon.getPrice() <= maxPrice) {
-					maxCoupons.add(coupon);
-				}
-			}
-		return maxCoupons;
+		List<Coupon> coupons = couponRepo.findByPriceLessThanEqualAndCustomersId(maxPrice, customerId);
+		return coupons;
 		
 	}
 	
 	public Customer getCustomerDetails() {
-		return customerRepo.getById(customerId);
+		Customer customer = customerRepo.findById(customerId).get();
+		return customer;
 	}
 
 }

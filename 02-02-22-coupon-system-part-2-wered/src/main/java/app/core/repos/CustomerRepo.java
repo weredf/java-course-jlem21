@@ -32,6 +32,6 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 	 * @return coupon
 	 * @throws CouponSystemException
 	 */
-	Coupon getByEmailAndPassword(String email, String password) throws CouponSystemException;
+	Customer getByEmailAndPassword(String email, String password) throws CouponSystemException;
 
 }

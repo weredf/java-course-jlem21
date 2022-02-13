@@ -12,6 +12,7 @@ import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
+import app.core.job.CouponExpirationDailyJob;
 import app.core.login.ClientType;
 import app.core.login.LoginManager;
 import app.core.repos.CompanyRepo;
@@ -20,6 +21,7 @@ import app.core.repos.CustomerRepo;
 import app.core.services.AdminService;
 import app.core.services.ClientService;
 import app.core.services.CompanyService;
+import app.core.services.CustomerService;
 
 @SpringBootApplication
 public class Application {
@@ -28,17 +30,25 @@ public class Application {
 		ApplicationContext ctx = SpringApplication.run(Application.class, args);
 
 		LoginManager loginManager = ctx.getBean(LoginManager.class);
+		CouponExpirationDailyJob job = ctx.getBean(CouponExpirationDailyJob.class);
+		job.run();
+		
 		try {
 			AdminService adminService = (AdminService) loginManager.login("admin@admin.com", "admin",
 					ClientType.ADMINISTRATOR);
 			if (adminService != null) {
 				adminService.addCompany(new Company(0, "AAA", "aaa@mail.com", "aaaPass", null));
-				adminService.getOneCompany(1);
+				System.out.println(adminService.getOneCompany(1));
 				adminService.addCompany(new Company(0, "BBB", "bbb@mail.com", "bbbPass", null));
 				adminService.updateCompany(new Company(2, "CCC", "ccc@mail.com", "cccPass", null));
 				System.out.println(adminService.getAllCompanies());
 				adminService.deleteCompany(2);
-				// add customer etc.
+				adminService.addCustomer(new Customer(0, "ddd", "DDD", "ddd@mail.com", "dddPass", null));
+				System.out.println(adminService.getOneCustomer(1));
+				adminService.addCustomer(new Customer(0, "eee", "EEE", "eee@mail.com", "eeePass", null));
+				adminService.updateCustomer(new Customer(2, "fff", "FFF", "fff@mail.com", "fffPass", null));
+				System.out.println(adminService.getAllCustomers());
+//				adminService.deleteCustomer(2);
 			} else {
 				System.out.println("login failed");
 			}
@@ -54,7 +64,12 @@ public class Application {
 			}
 			
 			{
-				// add customer service
+				CustomerService customerService = (CustomerService) loginManager.login("ddd@mail.com", "dddPass", ClientType.CUSTOMER);
+				if (customerService != null) {
+					System.out.println("logged in as customer id: " + customerService.getCustomerDetails().getId());
+					customerService.purchaseCoupon(new Coupon(1, new Company(1, null, null, null, null), Category.FOOD, "10%", "10% discount on food", LocalDate.of(2021, 3, 1), LocalDate.of(2022, 5, 1), 5, 10.9, "image", null));
+					System.out.println(customerService.getCustomerDetails());
+				}
 			}
 			
 		} catch (CouponSystemException e) {
