@@ -15,11 +15,7 @@ import app.core.exceptions.CouponSystemException;
 import app.core.job.CouponExpirationDailyJob;
 import app.core.login.ClientType;
 import app.core.login.LoginManager;
-import app.core.repos.CompanyRepo;
-import app.core.repos.CouponRepo;
-import app.core.repos.CustomerRepo;
 import app.core.services.AdminService;
-import app.core.services.ClientService;
 import app.core.services.CompanyService;
 import app.core.services.CustomerService;
 
@@ -58,7 +54,11 @@ public class Application {
 				System.out.println("logged in as company id: " + companyService.getCompanyDetails().getId());
 				companyService.addCoupon(new Coupon(0, companyService.getCompanyDetails(), Category.FOOD, "10%", "10% discount on food", LocalDate.of(2021, 3, 1), LocalDate.of(2022, 5, 1), 5, 10.9, "image", null));
 				System.out.println(companyService.getCompanyCoupons(11));
-				// use other methods
+				companyService.addCoupon(new Coupon(0, companyService.getCompanyDetails(), Category.VACATION, "15%", "15% discount on vacation", LocalDate.of(2021, 10, 1), LocalDate.of(2022, 3, 1), 10, 22.5, "image", null));
+				System.out.println(companyService.getCompanyCoupons(Category.VACATION));
+				companyService.updateCoupon(new Coupon(2, companyService.getCompanyDetails(), Category.FOOD, "15%", "15% discount on food", LocalDate.of(2021, 10, 1), LocalDate.of(2022, 2, 1), 10, 22.5, "image", null));
+				System.out.println(companyService.getCompanyCoupons());
+//				companyService.deleteCoupon(2);
 			} else {
 				System.out.println("login failed");
 			}
@@ -68,28 +68,17 @@ public class Application {
 				if (customerService != null) {
 					System.out.println("logged in as customer id: " + customerService.getCustomerDetails().getId());
 					customerService.purchaseCoupon(new Coupon(1, new Company(1, null, null, null, null), Category.FOOD, "10%", "10% discount on food", LocalDate.of(2021, 3, 1), LocalDate.of(2022, 5, 1), 5, 10.9, "image", null));
-					System.out.println(customerService.getCustomerDetails());
+//					customerService.purchaseCoupon(null);
+					System.out.println(customerService.getCustomerCoupons(20));
+					System.out.println(customerService.getCustomerCoupons(Category.FOOD));
+					System.out.println(customerService.getCustomerCoupons());
 				}
 			}
 			
 		} catch (CouponSystemException e) {
 			e.printStackTrace();
 		}
-
-		/*
-		 * { CompanyRepo companyRepo = ctx.getBean(CompanyRepo.class); CustomerRepo
-		 * customerRepo = ctx.getBean(CustomerRepo.class); CouponRepo couponRepo =
-		 * ctx.getBean(CouponRepo.class);
-		 * 
-		 * Company company = new Company(0, "AAA", "aaa@mail.com", "aaaPass", null);
-		 * Coupon coupon = new Coupon(0, company, Category.FOOD, "10%",
-		 * "10% discount on food", LocalDate.of(2021, 3, 1), LocalDate.of(2022, 5, 1),
-		 * 5, 10.9, "image", null); company.addCoupon(coupon); Customer customer = new
-		 * Customer(0, "ppp", "PPP", "ppp@mail.com", "pppPass", null);
-		 * customer.addCoupon(coupon); coupon.addCustomer(customer);
-		 * couponRepo.save(coupon); customerRepo.save(customer);
-		 * companyRepo.save(company); }
-		 */
+		
 		{
 			try {
 				TimeUnit.SECONDS.sleep(20);
