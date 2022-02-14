@@ -29,7 +29,7 @@ public class ItemService {
 		if (opt.isPresent()) {
 			return opt.get();
 		} else {
-			throw new RuntimeException("get item with id " + id + " faild - not found");
+			throw new RuntimeException("getItem with id " + id + " failed - not found");
 		}
 	}
 

@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -15,6 +16,7 @@ import app.core.entities.Coupon;
 import app.core.repos.CouponRepo;
 
 @Component
+@Transactional
 @Scope("singleton")
 public class CouponExpirationDailyJob implements Runnable {
 
@@ -23,21 +25,19 @@ public class CouponExpirationDailyJob implements Runnable {
 	private boolean quit;
 	private Thread thread = new Thread(this, "daily_job");
 
-	public CouponExpirationDailyJob(CouponRepo couponRepo) {
-	}
-
 	@Override
 	public void run(){
 		System.out.println(">>> Daily job running");
 		while(!quit) {
 			try {
+				TimeUnit.SECONDS.sleep(20);
 				List<Coupon> coupons = couponRepo.findAll();
 				for (Coupon coupon : coupons) {
 					if(LocalDate.now().isAfter(coupon.getEndDate())) {
 						couponRepo.delete(coupon);
 					}
 				}
-				System.out.println("All expired coupons deleted");
+				System.out.println(">>> All expired coupons deleted");
 				TimeUnit.DAYS.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();

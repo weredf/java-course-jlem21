@@ -36,9 +36,12 @@ public class CompanyService extends ClientService{
 	public int addCoupon (Coupon coupon) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findByCompanyIdAndTitle(coupon.getCompany().getId(), coupon.getTitle());
 		if (opt.isEmpty()) {
-			Company company = companyRepo.save(coupon.getCompany());
+//			Company company = companyRepo.save(coupon.getCompany());
+//			company.addCoupon(coupon);
+//			return coupon.getId();
+			Company company = getCompanyDetails();
 			company.addCoupon(coupon);
-			return coupon.getId();
+			return couponRepo.save(coupon).getId();
 		} else {
 			throw new CouponSystemException("addCoupon failed - company " + coupon.getCompany().getId() + " id not found");
 		}

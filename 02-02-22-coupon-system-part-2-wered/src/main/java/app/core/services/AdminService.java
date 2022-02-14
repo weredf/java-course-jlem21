@@ -69,9 +69,9 @@ public class AdminService extends ClientService{
 		}
 	}
 	
-	public void addCustomer (Customer customer) throws CouponSystemException {
+	public int addCustomer (Customer customer) throws CouponSystemException {
 		if (!customerRepo.existsByEmail(customer.getEmail())) {
-			customerRepo.save(customer);
+			return customerRepo.save(customer).getId();
 		} else {
 			throw new CouponSystemException("addCustomer failed - email already exist");
 		}
