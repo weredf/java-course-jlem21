@@ -36,11 +36,7 @@ public class CompanyService extends ClientService{
 	public int addCoupon (Coupon coupon) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findByCompanyIdAndTitle(coupon.getCompany().getId(), coupon.getTitle());
 		if (opt.isEmpty()) {
-//			Company company = companyRepo.save(coupon.getCompany());
-//			company.addCoupon(coupon);
-//			return coupon.getId();
-			Company company = getCompanyDetails();
-			company.addCoupon(coupon);
+			getCompanyDetails().addCoupon(coupon);
 			return couponRepo.save(coupon).getId();
 		} else {
 			throw new CouponSystemException("addCoupon failed - company " + coupon.getCompany().getId() + " id not found");
@@ -52,7 +48,6 @@ public class CompanyService extends ClientService{
 		Optional<Coupon> opt = couponRepo.findById(coupon.getId());
 		if(opt.isPresent()) {
 			couponRepo.save(coupon);
-			// addCoupon like above?
 		} else {
 			throw new CouponSystemException("updateCoupon failed - coupon " + coupon.getId() + " doesn't exist");
 		}
