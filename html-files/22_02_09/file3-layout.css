@@ -1,0 +1,32 @@
+section{
+    border: 1px dotted darkgray;
+    height: 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: 20% 70% 10%;
+    grid-template-columns: 20% 80%;
+}
+header{
+    border: inherit;
+    grid-column: span 2;
+}
+aside{
+    border: inherit;
+}
+main{
+    border: inherit;
+}
+footer{
+    border: inherit;
+    grid-column: span 2;
+}
+html, body{
+    margin: 0;
+    height: 100%;
+    background-color: lightgrey;
+    font-style: oblique;
+    color: navy;
+}
+h1{
+    text-align: center;
+}

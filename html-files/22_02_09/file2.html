@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Postitioning</title>
+    <style>
+        html {
+            height: 200%;
+            width: 200%;
+        }
+        div{
+            background-color: cornflowerblue;
+            width: 100px;
+            height: 100px;
+            border: 5px solid black;
+            text-align: center;
+            /* left: 30px;  doesn't work with a static element */
+            font-size: x-large;
+        }
+        .relative{
+            position: relative;
+            background-color: burlywood;
+            left: 30px; /* pushes inwards, from left side */
+            bottom: 30px; /* pushes upwards, from the bottom */
+            /* z-index: -1;  positive is to the front, minus is to the back (default is 0) */
+        }
+        .fixed{ 
+            position: fixed; /* fixed location, even if body scrolled */
+            background-color: coral;
+            /* left: 250px; */
+            right: 0; /* stuck at the right side */
+            bottom: 0; /* stuck at bottom */
+        }
+        .absolute{
+            background-color: darkolivegreen;
+            position: absolute; /* absolute location, moves when scrolling*/
+            left: 50%; /*35%*/
+            top: 50%; /*20%*/
+            transform: translate(-50%, -50%) rotate(45deg); /*translate corrects x/y axis values*/
+        }
+        fieldset{
+            position: absolute;
+            height: 300px;
+            width: 400px;
+            top: 25%;
+            left: 25%;
+        }
+        .sticky{
+            background-color: fuchsia;
+            position: sticky; /* between fixed and relative*/
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div>static</div>
+    <div class="relative">relative</div>
+    <div class="fixed">fixed</div>
+    <div>static</div>
+    <div>static</div>
+    
+    <fieldset>
+        <legend>container</legend>
+        <div class="absolute">absolute</div>
+        <!-- container needs to be absolute as well (or something else, not static!) -->
+        <div class="sticky">sticky</div>
+        <!-- moves along while scrolling within the container -->
+    </fieldset>
+</body>
+</html>
