@@ -18,24 +18,6 @@ public interface CompanyRepo extends JpaRepository<Company, Integer> {
 	boolean existsByEmail(String email) throws CouponSystemException;
 
 	/**
-	 * Check if company exists by email and password
-	 * @param email
-	 * @param password
-	 * @return boolean
-	 * @throws CouponSystemException
-	 */
-	boolean existsByEmailAndPassword(String email, String password) throws CouponSystemException;
-
-	/**
-	 * Get one company by email and password
-	 * @param email
-	 * @param password
-	 * @return company
-	 * @throws CouponSystemException
-	 */
-	Company getByEmailAndPassword(String email, String password) throws CouponSystemException;
-
-	/**
 	 * Find one company by email and password
 	 * @param email
 	 * @param password

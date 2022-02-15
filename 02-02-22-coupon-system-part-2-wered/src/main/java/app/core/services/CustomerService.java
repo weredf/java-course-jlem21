@@ -31,7 +31,6 @@ public class CustomerService extends ClientService{
 	}
 	
 	// add check - no double coupon purchases, amount not 0, not expired (job takes care of this?)
-	// after purchase: amount -1
 	public void purchaseCoupon(Coupon coupon) throws CouponSystemException {
 		Optional<Coupon> opt1 = couponRepo.findByIdAndCustomersId(coupon.getId(), customerId);
 		if(opt1.isEmpty()) {
@@ -41,8 +40,7 @@ public class CustomerService extends ClientService{
 				int amount = coupon.getAmount();
 				if(amount > 0) {
 					getCustomerDetails().addCoupon(coupon);
-					coupon.setAmount(amount--);
-					couponRepo.save(coupon); //?
+					coupon.setAmount(amount-1);
 				} else throw new CouponSystemException("purchaseCoupon failed - coupon amount finished");
 			} else throw new CouponSystemException("purchaseCoupon failed - coupon doesn't exist");
 		} else {

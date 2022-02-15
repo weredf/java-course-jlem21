@@ -6,8 +6,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import app.core.entities.Company;
@@ -32,17 +30,17 @@ public class AdminService extends ClientService{
 		if (!companyRepo.existsByEmail(company.getEmail())) {
 			return companyRepo.save(company).getId();
 		} else {
-			throw new CouponSystemException("addCompany failed - email already exist");
+			throw new CouponSystemException("addCompany failed - email already in use");
 		}
 	}
 	
-	// add check - no updating name
 	public void updateCompany(Company company) throws CouponSystemException {
 		Optional<Company> opt = companyRepo.findById(company.getId());
 		if (opt.isPresent()) {
+			company.setName(opt.get().getName());
 			companyRepo.save(company);
 		} else {
-			throw new CouponSystemException("updateCompany failed - company doesn't exist");
+			throw new CouponSystemException("updateCompany failed - company with id " + company.getId() + " doesn't exist");
 		}
 	}
 	
@@ -51,7 +49,7 @@ public class AdminService extends ClientService{
 		if(opt.isPresent()) {
 			companyRepo.deleteById(companyId);
 		} else {
-			throw new CouponSystemException("deleteCompany failed - company doesn't exist");
+			throw new CouponSystemException("deleteCompany failed - company with id " + companyId + " doesn't exist");
 		}
 	}
 	
@@ -65,7 +63,7 @@ public class AdminService extends ClientService{
 		if (opt.isPresent()) {
 			return opt.get();
 		} else {
-			 throw new CouponSystemException("getOneCompany failed - company doesn't exist");
+			 throw new CouponSystemException("getOneCompany failed - company with id " + companyId + " doesn't exist");
 		}
 	}
 	
@@ -73,11 +71,10 @@ public class AdminService extends ClientService{
 		if (!customerRepo.existsByEmail(customer.getEmail())) {
 			return customerRepo.save(customer).getId();
 		} else {
-			throw new CouponSystemException("addCustomer failed - email already exist");
+			throw new CouponSystemException("addCustomer failed - email already in use");
 		}
 	}
 	
-	// add check - no updating name
 	public void updateCustomer (Customer customer) throws CouponSystemException {
 		Optional<Customer> opt = customerRepo.findById(customer.getId());
 		if (opt.isPresent()) {

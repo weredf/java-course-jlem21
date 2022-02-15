@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
 import app.core.entities.Category;
@@ -20,6 +21,7 @@ import app.core.services.CompanyService;
 import app.core.services.CustomerService;
 
 @Component
+@EnableScheduling
 public class Test {
 
 	@Autowired

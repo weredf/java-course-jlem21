@@ -20,7 +20,6 @@ public class CompanyService extends ClientService{
 
 	private int companyId;
 	
-	// to change
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
 		Optional<Company> opt = companyRepo.findByEmailAndPassword(email, password);
@@ -34,19 +33,20 @@ public class CompanyService extends ClientService{
 	}
 	
 	public int addCoupon (Coupon coupon) throws CouponSystemException {
-		Optional<Coupon> opt = couponRepo.findByCompanyIdAndTitle(coupon.getCompany().getId(), coupon.getTitle());
+		Optional<Coupon> opt = couponRepo.findByCompanyIdAndTitle(companyId, coupon.getTitle());
 		if (opt.isEmpty()) {
+			coupon.setCompany(getCompanyDetails());
 			getCompanyDetails().addCoupon(coupon);
 			return couponRepo.save(coupon).getId();
 		} else {
-			throw new CouponSystemException("addCoupon failed - company " + coupon.getCompany().getId() + " id not found");
+			throw new CouponSystemException("addCoupon failed - coupon title " + coupon.getTitle() + " already in use");
 		}
 	}
 	
-	// add check - no updating company?
 	public void updateCoupon (Coupon coupon) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findById(coupon.getId());
 		if(opt.isPresent()) {
+			coupon.setCompany(getCompanyDetails());
 			couponRepo.save(coupon);
 		} else {
 			throw new CouponSystemException("updateCoupon failed - coupon " + coupon.getId() + " doesn't exist");

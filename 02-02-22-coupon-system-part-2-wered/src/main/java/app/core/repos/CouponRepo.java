@@ -1,5 +1,6 @@
 package app.core.repos;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,15 +38,6 @@ public interface CouponRepo extends JpaRepository<Coupon, Integer> {
 	 * @throws CouponSystemException
 	 */
 	List<Coupon> findByPriceLessThanEqualAndCompany(Double maxPrice, Company company) throws CouponSystemException;
-
-	/**
-	 * Check if coupon with title already exists for this company
-	 * @param title
-	 * @param company
-	 * @return boolean
-	 * @throws CouponSystemException
-	 */
-	boolean existsByTitleAndCompany(String title, Company company) throws CouponSystemException;
 
 	/**
 	 * Find coupon of company with specific title
@@ -90,4 +82,11 @@ public interface CouponRepo extends JpaRepository<Coupon, Integer> {
 	 * @throws CouponSystemException
 	 */
 	List<Coupon> findByPriceLessThanEqualAndCustomersId(double maxPrice, int customerId) throws CouponSystemException;
+
+	/**
+	 * Delete all coupons that have expired
+	 * @param date
+	 * @throws CouponSystemException
+	 */
+	void deleteByEndDateBefore(LocalDate date) throws CouponSystemException;
 }
