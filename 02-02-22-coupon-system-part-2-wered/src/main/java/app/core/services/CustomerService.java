@@ -30,7 +30,6 @@ public class CustomerService extends ClientService{
 		}
 	}
 	
-	// add check - no double coupon purchases, amount not 0, not expired (job takes care of this?)
 	public void purchaseCoupon(Coupon coupon) throws CouponSystemException {
 		Optional<Coupon> opt1 = couponRepo.findByIdAndCustomersId(coupon.getId(), customerId);
 		if(opt1.isEmpty()) {

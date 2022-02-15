@@ -3,10 +3,8 @@ package app.core.tests;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import app.core.entities.Category;
@@ -21,13 +19,11 @@ import app.core.services.CompanyService;
 import app.core.services.CustomerService;
 
 @Component
-@EnableScheduling
-public class Test {
+public class Test implements CommandLineRunner{
 
 	@Autowired
 	private LoginManager loginManager;
 
-	@PostConstruct
 	public void testAll() throws CouponSystemException {
 		System.out.println("=== testAll started");
 		try {
@@ -39,7 +35,7 @@ public class Test {
 			e.printStackTrace();
 		} finally {
 			try {
-				TimeUnit.SECONDS.sleep(20);
+				TimeUnit.SECONDS.sleep(5);
 			} catch (InterruptedException e) {
 				throw new CouponSystemException("Interrupted ", e);
 			}
@@ -135,5 +131,10 @@ public class Test {
 			System.out.println("All company coupons: " + customerService.getCustomerCoupons());
 		}
 		System.out.println("=== testCustomer ended");
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		testAll();
 	}
 }
