@@ -1,0 +1,23 @@
+<h1>Home Page</h1>
+<!-- data binding ts and template communication -->
+
+<!-- string interpolation - insert values from ts -->
+<div>date: {{date}}</div>
+<div>random number: {{x}}</div>
+<div>function says: {{f()}}</div>
+<br>
+<!-- event binding - template event to ts function -->
+<!-- () -->
+<button (click)="f2()">click here</button>
+<br><br>
+<!-- property binding - template event to ts function -->
+<!-- [] -->
+<button [disabled]="buttonDisabled">click here</button>
+
+<hr>
+<!-- two way binding - template changes tx vice versa -->
+<!-- [()] -->
+<input type="text" [(ngModel)]="val">
+<input type="text" [(ngModel)]="val">
+<br>
+<button (click)="clear()">clear</button>
