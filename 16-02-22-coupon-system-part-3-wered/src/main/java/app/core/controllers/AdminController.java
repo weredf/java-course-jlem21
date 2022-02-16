@@ -45,7 +45,7 @@ public class AdminController {
 		return ResponseEntity.ok("company updated: " + company);
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/{companyId}")
 	public ResponseEntity<?> deleteCompany(@RequestParam int companyId) throws CouponSystemException {
 		adminService.deleteCompany(companyId);
 		return ResponseEntity.ok("company deleted: " + companyId);
@@ -65,12 +65,12 @@ public class AdminController {
 		return re;
 	}
 	
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@PostMapping(value ="/add-customer/{customer}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public int addCustomer(@RequestBody Customer customer) throws CouponSystemException {
 		return adminService.addCustomer(customer);
 	}
 	
-	@PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@PutMapping(value = "/update-customer/{customer}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) throws CouponSystemException {
 		adminService.updateCustomer(customer);
 		return ResponseEntity.ok("customer updated: " + customer);
