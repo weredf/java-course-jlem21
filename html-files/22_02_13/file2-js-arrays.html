@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <h1>JS Arrays</h1>
+    <script>
+        let arr = ["red", "green", "blue"];
+        console.log(arr);
+
+        // splice - add to certain index
+        // first number is starting index in array
+        // second number is delete count, how many elements to delete
+        arr.splice(2, 0, "aaa", "bbb");
+        console.log(arr.join());
+
+        // will replace aaa and bbb
+        arr.splice(2, 2, "ccc", "ddd");
+        console.log(arr.join());
+
+        // use splice to delete element 1 and 2
+        arr.splice(1, 2);
+        console.log(arr.join());
+
+        // concat - joins 2 arrays into a new array
+        let arr1 = [1, 2, 3];
+        let arr2 = [4, 5, 6];
+        let arr3 = arr1.concat(arr2);
+        console.log(arr3.join());
+
+        let arr4 = arr1.concat(arr2).concat(arr3);
+        console.log(arr4.join());
+
+        // takes selection of elements from array
+        // starts with first index, ends with second index (not included!)
+        let arr5 = arr4.slice(3, 6);
+        console.log(arr5.join());
+        arr5 = arr4.slice(3) // from index 3 until end
+        console.log(arr5.join());
+
+        // shift
+        arr5 = [2, 4, 6, 8];
+        console.log(arr5.join);
+        let x = arr5.shift();
+
+    </script>
+</body>
+</html>

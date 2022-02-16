@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>JS Arrays</h1>
+    <script>
+        let arr = [2, 4, 6, 1, 8, 4, 9, 3]
+
+        // get max/min from given numbers in brackets
+        let max = Math.max(2, 5, 7, 1, 4);
+        console.log(max);
+
+        // get max/min from array declared earlier
+        // param 1 - reference for 'this' is used in the method
+        // param 2 - reference for object on which to apply method
+        max = Math.max.apply(null, arr);
+        console.log(max);
+
+        class Movie {
+            constructor(name) {
+                this.name = name;
+            }
+        }
+
+        class Person {
+            constructor(name) {
+                this.name = name;
+            }
+            printName() {
+                console.log("the name is: " + this.name);
+            }
+
+            speak(x){
+                console.log(this.name + " is saying: " + x);
+            }
+        }
+
+        let movie = new Movie("Scream");
+        let person = new Person("Tom");
+
+        person.printName();
+        person.speak("aaa");
+
+        person.printName.apply(movie);
+        person.speak.apply(movie, ["bbb"]);
+        // movie.printName();
+
+    </script>
+</body>
+
+</html>

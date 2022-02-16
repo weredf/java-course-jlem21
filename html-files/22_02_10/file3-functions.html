@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // function call
+        greet();
+        // print function
+        console.log(greet);
+        // function call
+        console.log(hello());
+        // print function
+        console.log(hello);
+        // get a reference to the function
+        let x = greet;
+        let y = hello;
+        // call the function using the reference
+        console.log(x);
+        console.log(y);
+        // print the type
+        console.log(typeof x);
+        console.log(typeof y);
+        console.log(typeof x());
+        console.log(typeof y());
+
+        // function definition
+        function greet() {
+            console.log("hello");
+        }
+
+        function hello() {
+            return "hello";
+        }
+    </script>
+</body>
+
+</html>
