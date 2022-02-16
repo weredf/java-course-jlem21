@@ -77,7 +77,7 @@ public class CompanyService extends ClientService{
 		return coupons;
 	}
 	
-	public Company getCompanyDetails() {
+	public Company getCompanyDetails() throws CouponSystemException {
 		return companyRepo.findById(companyId).get();
 		
 	}

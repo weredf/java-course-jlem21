@@ -54,7 +54,7 @@ public class AdminService extends ClientService{
 		}
 	}
 	
-	public List<Company> getAllCompanies() {
+	public List<Company> getAllCompanies() throws CouponSystemException {
 		List<Company> companies = companyRepo.findAll();
 		return companies;
 	}
@@ -93,7 +93,7 @@ public class AdminService extends ClientService{
 		}
 	}
 	
-	public List<Customer> getAllCustomers() {
+	public List<Customer> getAllCustomers() throws CouponSystemException {
 		List<Customer> customers = customerRepo.findAll();
 		return customers;
 	}

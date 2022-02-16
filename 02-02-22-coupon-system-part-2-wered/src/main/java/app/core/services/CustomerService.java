@@ -65,7 +65,7 @@ public class CustomerService extends ClientService{
 		
 	}
 	
-	public Customer getCustomerDetails() {
+	public Customer getCustomerDetails() throws CouponSystemException {
 		Customer customer = customerRepo.findById(customerId).get();
 		return customer;
 	}
