@@ -33,12 +33,14 @@ public class CouponExpirationDailyJob implements Runnable {
 		System.out.println(">>> Daily job running");
 		while(!quit) {
 			try {
-				TimeUnit.SECONDS.sleep(10); // to fix
+				TimeUnit.SECONDS.sleep(5);
 				adminService.deleteExpiredCoupons();
 				System.out.println(">>> All expired coupons deleted");
 				TimeUnit.DAYS.sleep(1);
-			} catch (InterruptedException | CouponSystemException e) {
-				e.printStackTrace();
+			} catch (InterruptedException e) {
+				System.out.println("Daily job: " + e.getMessage());
+			} catch (CouponSystemException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 	}
