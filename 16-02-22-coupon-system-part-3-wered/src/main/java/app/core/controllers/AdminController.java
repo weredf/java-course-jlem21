@@ -23,6 +23,7 @@ import app.core.services.AdminService;
 
 @RestController
 @RequestMapping("api/admin")
+// add aspect filter!
 public class AdminController {
 
 	@Autowired
@@ -30,8 +31,9 @@ public class AdminController {
 	
 	// to do: client login, token (object) from server, client saves token
 	// http protocol is stateless. server gets header with token from client
-	public boolean login() {
-		return false;
+	public String login() {
+		String token ="";
+		return token;
 	}
 	
 	@PostMapping(value ="/add-company/{company}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
