@@ -24,6 +24,10 @@ public class Test implements CommandLineRunner{
 	@Autowired
 	private LoginManager loginManager;
 
+	/**
+	 * Test all ClientService methods
+	 * @throws CouponSystemException
+	 */
 	public void testAll() throws CouponSystemException {
 		System.out.println("=== testAll started");
 		try {
@@ -44,6 +48,10 @@ public class Test implements CommandLineRunner{
 
 	}
 
+	/**
+	 * Test all AdminService methods
+	 * @throws CouponSystemException
+	 */
 	private void testAdmin() throws CouponSystemException {
 		System.out.println("=== testAdmin started");
 		try {
@@ -81,6 +89,10 @@ public class Test implements CommandLineRunner{
 		System.out.println("=== testAdmin ended");
 	}
 
+	/**
+	 * Test all CompanyService methods
+	 * @throws CouponSystemException
+	 */
 	private void testCompany() throws CouponSystemException {
 		System.out.println("=== testCompany started");
 		CompanyService companyService = (CompanyService) loginManager.login("aaa@mail.com", "aaaPass",
@@ -116,6 +128,10 @@ public class Test implements CommandLineRunner{
 		System.out.println("=== testCompany ended");
 	}
 
+	/**
+	 * Test all CustomerService methods
+	 * @throws CouponSystemException
+	 */
 	private void testCustomer() throws CouponSystemException {
 		System.out.println("=== testCustomer started");
 		CustomerService customerService = (CustomerService) loginManager.login("ddd@mail.com", "dddPass",

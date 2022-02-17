@@ -22,11 +22,21 @@ public class AdminService extends ClientService{
 	@Value("${admin.password}")
 	private String password;
 	
+	/**
+	 * Login to AdminService
+	 * Returns boolean
+	 */
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
 		return email.equals(this.email) && password.equals(this.password);
 	}
 	
+	/**
+	 * Check if company exists by email, add company
+	 * @param company
+	 * @return company id
+	 * @throws CouponSystemException
+	 */
 	public int addCompany(Company company) throws CouponSystemException{
 		if (!companyRepo.existsByEmail(company.getEmail())) {
 			return companyRepo.save(company).getId();
@@ -35,6 +45,11 @@ public class AdminService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Update company, find by id, set name according to existing company
+	 * @param company
+	 * @throws CouponSystemException
+	 */
 	public void updateCompany(Company company) throws CouponSystemException {
 		Optional<Company> opt = companyRepo.findById(company.getId());
 		if (opt.isPresent()) {
@@ -45,6 +60,11 @@ public class AdminService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Delete company, find by id
+	 * @param companyId
+	 * @throws CouponSystemException
+	 */
 	public void deleteCompany(int companyId) throws CouponSystemException {
 		Optional<Company> opt = companyRepo.findById(companyId);
 		if(opt.isPresent()) {
@@ -54,11 +74,22 @@ public class AdminService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Find all companies
+	 * @return List of companies
+	 * @throws CouponSystemException
+	 */
 	public List<Company> getAllCompanies() throws CouponSystemException {
 		List<Company> companies = companyRepo.findAll();
 		return companies;
 	}
 	
+	/**
+	 * Find one company according to id
+	 * @param companyId
+	 * @return one company
+	 * @throws CouponSystemException
+	 */
 	public Company getOneCompany(int companyId) throws CouponSystemException {
 		Optional<Company> opt = companyRepo.findById(companyId);
 		if (opt.isPresent()) {
@@ -68,6 +99,12 @@ public class AdminService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Check if customer exists by email, add customer
+	 * @param customer
+	 * @return customer id
+	 * @throws CouponSystemException
+	 */
 	public int addCustomer (Customer customer) throws CouponSystemException {
 		if (!customerRepo.existsByEmail(customer.getEmail())) {
 			return customerRepo.save(customer).getId();
@@ -76,6 +113,11 @@ public class AdminService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Update customer, find by id, set name according to existing customer
+	 * @param customer
+	 * @throws CouponSystemException
+	 */
 	public void updateCustomer (Customer customer) throws CouponSystemException {
 		Optional<Customer> opt = customerRepo.findById(customer.getId());
 		if (opt.isPresent()) {
@@ -85,6 +127,11 @@ public class AdminService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Delete customer, find by id
+	 * @param customerId
+	 * @throws CouponSystemException
+	 */
 	public void deleteCustomer (int customerId) throws CouponSystemException {
 		if (customerRepo.existsById(customerId)) {
 			customerRepo.deleteById(customerId);
@@ -93,11 +140,22 @@ public class AdminService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Find all customers
+	 * @return
+	 * @throws CouponSystemException
+	 */
 	public List<Customer> getAllCustomers() throws CouponSystemException {
 		List<Customer> customers = customerRepo.findAll();
 		return customers;
 	}
 	
+	/**
+	 * Find one customer according to id
+	 * @param customerId
+	 * @return once customer
+	 * @throws CouponSystemException
+	 */
 	public Customer getOneCustomer(int customerId) throws CouponSystemException {
 		Optional<Customer> opt = customerRepo.findById(customerId);
 		if (opt.isPresent()) {
@@ -107,6 +165,10 @@ public class AdminService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Delete all expired coupons once a day
+	 * @throws CouponSystemException
+	 */
 	public void deleteExpiredCoupons() throws CouponSystemException {
 		this.couponRepo.deleteByEndDateBefore(LocalDate.now());
 	}
