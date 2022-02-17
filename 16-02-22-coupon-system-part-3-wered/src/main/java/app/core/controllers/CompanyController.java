@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import app.core.entities.Category;
 import app.core.entities.Company;
@@ -20,50 +21,50 @@ import app.core.entities.Coupon;
 import app.core.exceptions.CouponSystemException;
 import app.core.services.CompanyService;
 
-//@RestController
+@RestController
 @RequestMapping("/api/company")
 public class CompanyController {
 
 	@Autowired
 	private CompanyService companyService;
 	
-	// to do
+	// to do (id is not unique, email is!)
 	public boolean login() {
 		return false;
 	}
 	
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@PostMapping(value = "/add-coupon/{coupon}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public int addCoupon(@RequestBody Coupon coupon) throws CouponSystemException {
 		return companyService.addCoupon(coupon);
 	}
 	
-	@PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@PutMapping(value = "/update-coupon/{coupon}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> updateCoupon(@RequestBody Coupon coupon) throws CouponSystemException {
 		companyService.updateCoupon(coupon);
 		return ResponseEntity.ok("coupon updated: " + coupon);
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/{couponId}")
 	public ResponseEntity<?> deleteCoupon(@RequestParam int couponId) throws CouponSystemException {
 		companyService.deleteCoupon(couponId);
 		return ResponseEntity.ok("coupon deleted: " + couponId);
 	}
 	
-	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(path = "/get-company-coupons", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyCoupons() throws CouponSystemException {
 		List<Coupon> coupons = companyService.getCompanyCoupons();
 		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 		return re;
 	}
 	
-	@GetMapping(path = "/{category}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(path = "/get-company-coupons/{category}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyCoupons(Category category) throws CouponSystemException {
 		List<Coupon> coupons = companyService.getCompanyCoupons(category);
 		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 		return re;
 	}
 	
-	@GetMapping(path = "/{maxPrice}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(path = "/get-company-coupons/{maxPrice}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyCoupons(double maxPrice) throws CouponSystemException {
 		List<Coupon> coupons = companyService.getCompanyCoupons(maxPrice);
 		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);

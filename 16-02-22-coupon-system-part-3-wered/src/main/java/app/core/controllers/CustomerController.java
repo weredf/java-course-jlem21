@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import app.core.entities.Category;
 import app.core.entities.Coupon;
@@ -17,40 +18,40 @@ import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 import app.core.services.CustomerService;
 
-//@RestController
+@RestController
 @RequestMapping("/api/company")
 public class CustomerController {
 
 	@Autowired
 	private CustomerService customerService;
 	
-	// to do
+	// to do (id is not unique, email is!)
 	public boolean login() {
 		return false;
 	}
 	
 	// to check
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@PostMapping(value = "/purchase-coupon/{coupon}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> purchaseCoupon(@RequestBody Coupon coupon) throws CouponSystemException {
 		customerService.purchaseCoupon(coupon);
 		return ResponseEntity.ok("coupon purchased: " + coupon);
 	}
 	
-	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(path = "/get-customer-coupons", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons() throws CouponSystemException {
 		List<Coupon> coupons = customerService.getCustomerCoupons();
 		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 		return re;
 	}
 	
-	@GetMapping(path = "/{category}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(path = "/get-customer-coupons/{category}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(Category category) throws CouponSystemException {
 		List<Coupon> coupons = customerService.getCustomerCoupons(category);
 		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 		return re;
 	}
 	
-	@GetMapping(path = "/{maxPrice}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(path = "/get-customer-coupons/{maxPrice}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(double maxPrice) throws CouponSystemException {
 		List<Coupon> coupons = customerService.getCustomerCoupons(maxPrice);
 		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);

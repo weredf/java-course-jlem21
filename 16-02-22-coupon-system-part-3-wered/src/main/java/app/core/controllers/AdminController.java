@@ -28,7 +28,8 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
-	// to do
+	// to do: client login, token (object) from server, client saves token
+	// http protocol is stateless. server gets header with token from client
 	public boolean login() {
 		return false;
 	}
