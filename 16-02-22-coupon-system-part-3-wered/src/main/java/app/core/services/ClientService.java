@@ -16,5 +16,11 @@ public abstract class ClientService {
 	@Autowired
 	protected CouponRepo couponRepo;
 	
+	/**
+	 * @param email
+	 * @param password
+	 * @return Login to ClientService
+	 * @throws CouponSystemException
+	 */
 	public abstract boolean login(String email, String password) throws CouponSystemException;
 }

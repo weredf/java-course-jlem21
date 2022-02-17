@@ -20,6 +20,9 @@ public class CompanyService extends ClientService{
 
 	private int companyId;
 	
+	/**
+	 * Login to CompanyService
+	 */
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
 		Optional<Company> opt = companyRepo.findByEmailAndPassword(email, password);
@@ -32,6 +35,12 @@ public class CompanyService extends ClientService{
 			
 	}
 	
+	/**
+	 * Check if coupon exists for this company, and if title not already in use
+	 * @param coupon
+	 * @return coupon id
+	 * @throws CouponSystemException
+	 */
 	public int addCoupon (Coupon coupon) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findByCompanyIdAndTitle(companyId, coupon.getTitle());
 		if (opt.isEmpty()) {
@@ -42,6 +51,11 @@ public class CompanyService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Check if coupon exists by id, set company to logged in company
+	 * @param coupon
+	 * @throws CouponSystemException
+	 */
 	public void updateCoupon (Coupon coupon) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findById(coupon.getId());
 		if(opt.isPresent()) {
@@ -52,6 +66,11 @@ public class CompanyService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Delete coupon by id
+	 * @param couponId
+	 * @throws CouponSystemException
+	 */
 	public void deleteCoupon (int couponId) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findById(couponId);
 		if(opt.isPresent()) {
@@ -61,22 +80,44 @@ public class CompanyService extends ClientService{
 		}
 	}
 	
+	/**
+	 * Get all coupons by logged in company
+	 * @return List of coupons
+	 * @throws CouponSystemException
+	 */
 	public List<Coupon> getCompanyCoupons() throws CouponSystemException {
 		List<Coupon> coupons = couponRepo.findByCompany(getCompanyDetails());
 		return coupons;
 		
 	}
 
+	/**
+	 * Get all coupons by logged in company in specific category
+	 * @param category
+	 * @return List of coupons
+	 * @throws CouponSystemException
+	 */
 	public List<Coupon> getCompanyCoupons(Category category) throws CouponSystemException {
 		List<Coupon> coupons = couponRepo.findByCompanyAndCategory(getCompanyDetails(), category);
 		return coupons;
 	}
 
+	/**
+	 * Get all coupons by logged in company up to max price
+	 * @param maxPrice
+	 * @return List of coupons
+	 * @throws CouponSystemException
+	 */
 	public List<Coupon> getCompanyCoupons(double maxPrice) throws CouponSystemException {
 		List<Coupon> coupons = couponRepo.findByPriceLessThanEqualAndCompany(maxPrice, getCompanyDetails());
 		return coupons;
 	}
 	
+	/**
+	 * Get logged in company
+	 * @return company
+	 * @throws CouponSystemException
+	 */
 	public Company getCompanyDetails() throws CouponSystemException {
 		return companyRepo.findById(companyId).get();
 	}
