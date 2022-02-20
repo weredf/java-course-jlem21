@@ -39,30 +39,47 @@ public class CustomerController {
 	
 	@GetMapping(path = "/get-customer-coupons", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons() throws CouponSystemException {
-		List<Coupon> coupons = customerService.getCustomerCoupons();
-		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
-		return re;
+		try {
+			List<Coupon> coupons = customerService.getCustomerCoupons();
+			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@GetMapping(path = "/get-customer-coupons/{category}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(Category category) throws CouponSystemException {
-		List<Coupon> coupons = customerService.getCustomerCoupons(category);
-		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
-		return re;
+		try {
+			List<Coupon> coupons = customerService.getCustomerCoupons(category);
+			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+		
 	}
 	
 	@GetMapping(path = "/get-customer-coupons/{maxPrice}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(double maxPrice) throws CouponSystemException {
-		List<Coupon> coupons = customerService.getCustomerCoupons(maxPrice);
-		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
-		return re;
+		try {
+			List<Coupon> coupons = customerService.getCustomerCoupons(maxPrice);
+			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@GetMapping(path = "/{customerId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerDetails() throws CouponSystemException{
-		Customer customer = customerService.getCustomerDetails();
-		ResponseEntity<?> re = new ResponseEntity<>(customer, HttpStatus.OK);
-		return re;
+		try {
+			Customer customer = customerService.getCustomerDetails();
+			ResponseEntity<?> re = new ResponseEntity<>(customer, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 }

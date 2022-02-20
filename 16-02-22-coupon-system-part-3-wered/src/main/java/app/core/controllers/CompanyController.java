@@ -34,48 +34,77 @@ public class CompanyController {
 	}
 	
 	@PostMapping(value = "/add-coupon/{coupon}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	public int addCoupon(@RequestBody Coupon coupon) throws CouponSystemException {
-		return companyService.addCoupon(coupon);
+	public ResponseEntity<?> addCoupon(@RequestBody Coupon coupon) throws CouponSystemException {
+		try {
+			int id = companyService.addCoupon(coupon);
+			return ResponseEntity.ok("coupon added, id: " + id); 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
 	}
 	
 	@PutMapping(value = "/update-coupon/{coupon}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> updateCoupon(@RequestBody Coupon coupon) throws CouponSystemException {
-		companyService.updateCoupon(coupon);
-		return ResponseEntity.ok("coupon updated: " + coupon);
+		try {
+			companyService.updateCoupon(coupon);
+			return ResponseEntity.ok("coupon updated: " + coupon);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@DeleteMapping("/{couponId}")
 	public ResponseEntity<?> deleteCoupon(@RequestParam int couponId) throws CouponSystemException {
-		companyService.deleteCoupon(couponId);
-		return ResponseEntity.ok("coupon deleted: " + couponId);
+		try {
+			companyService.deleteCoupon(couponId);
+			return ResponseEntity.ok("coupon deleted: " + couponId);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@GetMapping(path = "/get-company-coupons", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyCoupons() throws CouponSystemException {
-		List<Coupon> coupons = companyService.getCompanyCoupons();
-		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
-		return re;
+		try {
+			List<Coupon> coupons = companyService.getCompanyCoupons();
+			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@GetMapping(path = "/get-company-coupons/{category}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyCoupons(Category category) throws CouponSystemException {
-		List<Coupon> coupons = companyService.getCompanyCoupons(category);
-		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
-		return re;
+		try {
+			List<Coupon> coupons = companyService.getCompanyCoupons(category);
+			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} 
 	}
 	
 	@GetMapping(path = "/get-company-coupons/{maxPrice}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyCoupons(double maxPrice) throws CouponSystemException {
-		List<Coupon> coupons = companyService.getCompanyCoupons(maxPrice);
-		ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
-		return re;
+		try {
+			List<Coupon> coupons = companyService.getCompanyCoupons(maxPrice);
+			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@GetMapping(path = "/{companyId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyDetails() throws CouponSystemException{
-		Company company = companyService.getCompanyDetails();
-		ResponseEntity<?> re = new ResponseEntity<>(company, HttpStatus.OK);
-		return re;
+		try {
+			Company company = companyService.getCompanyDetails();
+			ResponseEntity<?> re = new ResponseEntity<>(company, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 }

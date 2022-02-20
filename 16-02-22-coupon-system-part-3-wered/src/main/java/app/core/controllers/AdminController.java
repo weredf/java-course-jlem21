@@ -31,6 +31,10 @@ public class AdminController {
 	
 	// to do: client login, token (object) from server, client saves token
 	// http protocol is stateless. server gets header with token from client
+	/**
+	 * Login to AdminService
+	 * @return adminService through token
+	 */
 	public String login() {
 		String token ="";
 		return token;
@@ -38,65 +42,106 @@ public class AdminController {
 	
 	@PostMapping(value ="/add-company/{company}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> addCompany(@RequestBody Company company) throws CouponSystemException {
-		int id = adminService.addCompany(company);
-		return ResponseEntity.ok("company added, id: " + id);
+		try {
+			int id = adminService.addCompany(company);
+			return ResponseEntity.ok("company added, id: " + id);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
 	}
 	
 	@PutMapping(value = "/update-company/{company}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> updateCompany(@RequestBody Company company) throws CouponSystemException {
-		adminService.updateCompany(company);
-		return ResponseEntity.ok("company updated: " + company);
+		try {
+			adminService.updateCompany(company);
+			return ResponseEntity.ok("company updated: " + company);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@DeleteMapping("/{companyId}")
 	public ResponseEntity<?> deleteCompany(@RequestParam int companyId) throws CouponSystemException {
-		adminService.deleteCompany(companyId);
-		return ResponseEntity.ok("company deleted: " + companyId);
+		try {
+			adminService.deleteCompany(companyId);
+			return ResponseEntity.ok("company deleted: " + companyId);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@GetMapping(path = "/get-all-companies", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getAllCompanies() throws CouponSystemException {
-		List<Company> companies = adminService.getAllCompanies();
-		ResponseEntity<?> re = new ResponseEntity<>(companies, HttpStatus.OK);
-		return re;
+		try {
+			List<Company> companies = adminService.getAllCompanies();
+			ResponseEntity<?> re = new ResponseEntity<>(companies, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@GetMapping(path = "/get-company/{companyId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getOneCompany(@PathVariable int companyId) throws CouponSystemException{
-		Company company = adminService.getOneCompany(companyId);
-		ResponseEntity<?> re = new ResponseEntity<>(company, HttpStatus.OK);
-		return re;
+		try {
+			Company company = adminService.getOneCompany(companyId);
+			ResponseEntity<?> re = new ResponseEntity<>(company, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@PostMapping(value ="/add-customer/{customer}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	public int addCustomer(@RequestBody Customer customer) throws CouponSystemException {
-		return adminService.addCustomer(customer);
+	public ResponseEntity<?> addCustomer(@RequestBody Customer customer) throws CouponSystemException {
+		try {
+			int id = adminService.addCustomer(customer);
+			return ResponseEntity.ok("customer added, id: " + id);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
 	}
 	
 	@PutMapping(value = "/update-customer/{customer}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> updateCustomer(@RequestBody Customer customer) throws CouponSystemException {
-		adminService.updateCustomer(customer);
-		return ResponseEntity.ok("customer updated: " + customer);
+		try {
+			adminService.updateCustomer(customer);
+			return ResponseEntity.ok("customer updated: " + customer);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@DeleteMapping("/{customerId}")
 	public ResponseEntity<?> deleteCustomer(@RequestParam int customerId) throws CouponSystemException {
-		adminService.deleteCustomer(customerId);
-		return ResponseEntity.ok("customer deleted: " + customerId);
+		try {
+			adminService.deleteCustomer(customerId);
+			return ResponseEntity.ok("customer deleted: " + customerId);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@GetMapping(path = "/get-all-customers", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getAllCustomers() throws CouponSystemException {
-		List<Customer> customers = adminService.getAllCustomers();
-		ResponseEntity<?> re = new ResponseEntity<>(customers, HttpStatus.OK);
-		return re;
+		try {
+			List<Customer> customers = adminService.getAllCustomers();
+			ResponseEntity<?> re = new ResponseEntity<>(customers, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 	@GetMapping(path = "/get-customer/{customerId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getOneCustomer(@PathVariable int customerId) throws CouponSystemException{
-		Customer customer = adminService.getOneCustomer(customerId);
-		ResponseEntity<?> re = new ResponseEntity<>(customer, HttpStatus.OK);
-		return re;
+		try {
+			Customer customer = adminService.getOneCustomer(customerId);
+			ResponseEntity<?> re = new ResponseEntity<>(customer, HttpStatus.OK);
+			return re;
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
 	}
 	
 }

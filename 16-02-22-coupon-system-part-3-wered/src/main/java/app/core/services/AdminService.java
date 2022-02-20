@@ -123,7 +123,7 @@ public class AdminService extends ClientService{
 		if (opt.isPresent()) {
 			customerRepo.save(customer);
 		} else {
-			throw new CouponSystemException("updateCustomer failed - customer doesn't exist");
+			throw new CouponSystemException("updateCustomer failed - customer with id " + customer.getId() + " doesn't exist");
 		}
 	}
 	
