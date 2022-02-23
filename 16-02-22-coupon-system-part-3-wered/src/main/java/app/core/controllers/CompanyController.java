@@ -20,6 +20,8 @@ import app.core.entities.Category;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.exceptions.CouponSystemException;
+import app.core.jwt.util.JwtUtil;
+import app.core.login.ClientType;
 import app.core.services.CompanyService;
 
 @RestController
@@ -27,11 +29,20 @@ import app.core.services.CompanyService;
 public class CompanyController {
 
 	@Autowired
-	private CompanyService companyService; // email, client type, id hidden in token!
+	private CompanyService companyService;
+	@Autowired
+	private JwtUtil jwtUtil;
+	
 	
 	// to do (id is not unique, email is!)
-	public boolean login() {
-		return false;
+	@PutMapping("/login")
+	public String login(@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).getClientType() == ClientType.COMPANY) {
+			companyService.setCompanyId(jwtUtil.extractClient(token).getClientId());
+			return "You are logged in as company " + jwtUtil.extractClient(token).toString();
+		} else {
+			return "Wrong client type";
+		}
 	}
 	
 	@PostMapping(value = "/add-coupon/{coupon}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

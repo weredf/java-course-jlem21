@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,25 +18,35 @@ import app.core.entities.Category;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
+import app.core.jwt.util.JwtUtil;
+import app.core.login.ClientType;
 import app.core.services.CustomerService;
 
 @RestController
-@RequestMapping("/api/company")
+@RequestMapping("/api/customer")
 public class CustomerController {
 
 	@Autowired
 	private CustomerService customerService;
+	@Autowired
+	private JwtUtil jwtUtil;
 	
 	// to do (id is not unique, email is!)
-	public boolean login() {
-		return false;
+	@PutMapping("/login")
+	public String login(@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).getClientType() == ClientType.CUSTOMER) {
+			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
+			return "You are logged in as customer " + jwtUtil.extractClient(token).toString();
+		} else {
+			return "Wrong client type";
+		}
 	}
 	
 	// to check
 	@PostMapping(value = "/purchase-coupon/{coupon}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> purchaseCoupon(@RequestBody Coupon coupon, @RequestHeader String token) throws CouponSystemException {
 		customerService.purchaseCoupon(coupon);
-		return ResponseEntity.ok("coupon purchased: " + coupon);
+		return ResponseEntity.ok("coupon id " + coupon.getId() + " purchased");
 	}
 	
 	@GetMapping(path = "/get-customer-coupons", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

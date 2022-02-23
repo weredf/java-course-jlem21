@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import app.core.entities.Company;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
+import app.core.jwt.util.JwtUtil;
+import app.core.login.ClientType;
 import app.core.services.AdminService;
 
 @RestController
@@ -28,6 +30,8 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+	private JwtUtil jwtUtil;
 	
 	// to do: client login, token (object) from server, client saves token
 	// http protocol is stateless. server gets header with token from client
@@ -35,9 +39,13 @@ public class AdminController {
 	 * Login to AdminService
 	 * @return adminService through token
 	 */
-	public String login() {
-		String token ="";
-		return token;
+	@PutMapping("/login")
+	public String login(@RequestHeader String token) {
+		if(jwtUtil.extractClient(token).getClientType() == ClientType.ADMINISTRATOR) {
+			return "You are logged in as Admin";
+		} else {
+			return "You are not logged in as Admin";
+		}
 	}
 	
 	@PostMapping(value ="/add-company/{company}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

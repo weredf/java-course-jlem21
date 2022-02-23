@@ -12,12 +12,14 @@ import app.core.entities.Category;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
+import lombok.Setter;
 
 @Service
 @Transactional
 @Scope("prototype")
 public class CustomerService extends ClientService{
 
+	@Setter
 	private int customerId;
 	
 	/**
@@ -51,7 +53,7 @@ public class CustomerService extends ClientService{
 					getCustomerDetails().addCoupon(coupon);
 					coupon.setAmount(amount-1);
 				} else throw new CouponSystemException("purchaseCoupon failed - coupon amount finished");
-			} else throw new CouponSystemException("purchaseCoupon failed - coupon doesn't exist");
+			} else throw new CouponSystemException("purchaseCoupon failed - coupon with id " + coupon.getId() + " doesn't exist");
 		} else {
 			throw new CouponSystemException("purchaseCoupon failed - coupon already purchased");
 		}

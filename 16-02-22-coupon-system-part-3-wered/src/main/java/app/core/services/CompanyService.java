@@ -12,12 +12,14 @@ import app.core.entities.Category;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.exceptions.CouponSystemException;
+import lombok.Setter;
 
 @Service
 @Transactional
 @Scope("prototype")
 public class CompanyService extends ClientService{
 
+	@Setter
 	private int companyId;
 	
 	/**
