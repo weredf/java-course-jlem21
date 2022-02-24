@@ -20,16 +20,18 @@ public class Application {
 	}
 	
 	// register and map the filter
+	// container for registering filters
+	// register our filter - set the filter
+	// map the filter to route (a url pattern)
+	// return the set and routed FilterRegistrationBean
+	
 		@Bean
 		public FilterRegistrationBean<ClientFilter> clientFilter(JwtUtil jwtUtil) {
-			// container for registering filters
 			FilterRegistrationBean<ClientFilter> filterRegistrationBean = new FilterRegistrationBean<>();
-			// register our filter - set the filter
 			ClientFilter clientFilter = new ClientFilter(jwtUtil);
+//			if (jwtUtil.extractClient(null))
 			filterRegistrationBean.setFilter(clientFilter);
-			// map the filter to route (a url pattern)
 			filterRegistrationBean.addUrlPatterns("/api/*");
-			// return the set and routed FilterRegistrationBean
 			return filterRegistrationBean;
 		}
 }

@@ -42,18 +42,18 @@ public class CustomerService extends ClientService{
 	 * @param coupon
 	 * @throws CouponSystemException
 	 */
-	public void purchaseCoupon(Coupon coupon) throws CouponSystemException {
-		Optional<Coupon> opt1 = couponRepo.findByIdAndCustomersId(coupon.getId(), customerId);
+	public void purchaseCoupon(int couponId) throws CouponSystemException {
+		Optional<Coupon> opt1 = couponRepo.findByIdAndCustomersId(couponId, customerId);
 		if(opt1.isEmpty()) {
-			Optional<Coupon> opt2 = couponRepo.findById(coupon.getId());
+			Optional<Coupon> opt2 = couponRepo.findById(couponId);
 			if(opt2.isPresent()) {
-				coupon = opt2.get();
+				Coupon coupon = opt2.get();
 				int amount = coupon.getAmount();
 				if(amount > 0) {
 					getCustomerDetails().addCoupon(coupon);
 					coupon.setAmount(amount-1);
 				} else throw new CouponSystemException("purchaseCoupon failed - coupon amount finished");
-			} else throw new CouponSystemException("purchaseCoupon failed - coupon with id " + coupon.getId() + " doesn't exist");
+			} else throw new CouponSystemException("purchaseCoupon failed - coupon with id " + couponId + " doesn't exist");
 		} else {
 			throw new CouponSystemException("purchaseCoupon failed - coupon already purchased");
 		}

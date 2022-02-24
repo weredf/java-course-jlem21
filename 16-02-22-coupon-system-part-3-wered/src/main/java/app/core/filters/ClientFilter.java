@@ -32,6 +32,10 @@ public class ClientFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String token = req.getHeader("token"); // can be shortened
+		String uri = req.getRequestURI();
+		System.out.println("======================================");
+		System.out.println(uri);
+		System.out.println("======================================");
 		if(token!=null) {
 			try {
 				if(!jwtUtil.isTokenExpired(token)) {
