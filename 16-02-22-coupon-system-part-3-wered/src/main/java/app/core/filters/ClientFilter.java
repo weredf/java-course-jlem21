@@ -42,13 +42,19 @@ public class ClientFilter implements Filter {
 			try {
 				// check token validity
 				// if valid forward the request to the end point
-				if (!jwtUtil.isTokenExpired(token) && uri.contains(client.toString())) {
+				if (!jwtUtil.isTokenExpired(token)) {
 					System.out.println(">>> FILTER - valid token");
-					chain.doFilter(request, response);
-					return;
+					if (uri.contains(client.toString())) {
+						chain.doFilter(request, response);
+						return;
+					} else {
+						System.out.println(">>> FILTER - wrong client type");
+						resp.sendError(HttpStatus.UNAUTHORIZED.value(), "wrong client type - go to login");
+						return;
+					}
 				}
 			} catch (Exception e) {
-				System.out.println(">>> FILTER - invalid token");
+				System.out.println(">>> FILTER - invalid token, expired");
 				resp.sendError(HttpStatus.UNAUTHORIZED.value(), "invalid token - go to login");
 				return;
 			}
@@ -58,7 +64,9 @@ public class ClientFilter implements Filter {
 		// if not valid
 		// throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not logged in -
 		// bad credentials or expired");
-		resp.sendError(HttpStatus.UNAUTHORIZED.value(), "not logged in");
+		resp.sendError(HttpStatus.UNAUTHORIZED.value(), "not logged in - bad credentials or expired");
+		return;
+		
 	}
 
 }

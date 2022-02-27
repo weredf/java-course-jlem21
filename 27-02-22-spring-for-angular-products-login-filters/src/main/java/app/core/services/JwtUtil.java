@@ -45,7 +45,7 @@ public class JwtUtil {
 	public static class ClientDetails {
 		public String email;
 		public ClientType clientType;
-		public int clentId;
+		public int clientId;
 
 		public enum ClientType {
 			ADMIN, COMPANY, CUSTOMER
@@ -56,7 +56,7 @@ public class JwtUtil {
 	public String generateToken(ClientDetails clientDetails) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("clientType", clientDetails.clientType);
-		claims.put("clentId", clientDetails.clentId);
+		claims.put("clientId", clientDetails.clientId);
 		return createToken(claims, clientDetails.email);
 	}
 
@@ -81,7 +81,7 @@ public class JwtUtil {
 		Claims claims = extractAllClaims(token);
 		String email = claims.getSubject();
 		ClientType clientType = ClientType.valueOf(claims.get("clientType", String.class));
-		int clientId = claims.get("clentId", Integer.class);
+		int clientId = claims.get("clientId", Integer.class);
 		ClientDetails clientDetails = new ClientDetails(email, clientType, clientId);
 		return clientDetails;
 	}

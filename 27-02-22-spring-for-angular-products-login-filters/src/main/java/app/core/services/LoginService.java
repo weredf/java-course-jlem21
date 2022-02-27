@@ -24,7 +24,7 @@ public class LoginService {
 			String token = jwtUtil.generateToken(clientDetails);
 			return token;
 		} else {
-			throw new ProductException("login faild - bad credentials");
+			throw new ProductException("login failed - bad credentials");
 		}
 	}
 

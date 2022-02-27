@@ -25,7 +25,7 @@ import app.core.login.ClientType;
 import app.core.services.CompanyService;
 
 @RestController
-@RequestMapping("/api/company")
+@RequestMapping("/api/COMPANY")
 public class CompanyController {
 
 	@Autowired

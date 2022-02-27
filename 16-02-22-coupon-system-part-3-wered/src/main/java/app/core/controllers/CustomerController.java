@@ -22,7 +22,7 @@ import app.core.login.ClientType;
 import app.core.services.CustomerService;
 
 @RestController
-@RequestMapping("/api/customer")
+@RequestMapping("/api/CUSTOMER")
 public class CustomerController {
 
 	@Autowired
