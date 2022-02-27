@@ -25,7 +25,7 @@ import app.core.login.ClientType;
 import app.core.services.AdminService;
 
 @RestController
-@RequestMapping("api/admin")
+@RequestMapping("api/administrator")
 public class AdminController {
 
 	@Autowired

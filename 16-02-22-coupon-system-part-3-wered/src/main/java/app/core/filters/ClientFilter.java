@@ -13,12 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 
 import app.core.jwt.util.JwtUtil;
+import app.core.login.ClientType;
 
 // not component, otherwise filter will be valid for the whole application and login would be impossible
 public class ClientFilter implements Filter {
-	
+
 	private JwtUtil jwtUtil;
-	
+
 	public ClientFilter(JwtUtil jwtUtil) {
 		super();
 		this.jwtUtil = jwtUtil;
@@ -33,15 +34,16 @@ public class ClientFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String token = req.getHeader("token"); // can be shortened
 		String uri = req.getRequestURI();
+		ClientType client = jwtUtil.extractClient(token).getClientType();
 		System.out.println("======================================");
 		System.out.println(uri);
 		System.out.println("======================================");
-		if(token!=null) {
+		if (token != null) {
 			try {
-				if(!jwtUtil.isTokenExpired(token)) {
+				// check token validity
+				// if valid forward the request to the end point
+				if (!jwtUtil.isTokenExpired(token) && uri.contains(client.toString())) {
 					System.out.println(">>> FILTER - valid token");
-					// check token validity
-					// if valid forward the request to the end point
 					chain.doFilter(request, response);
 					return;
 				}
@@ -50,11 +52,12 @@ public class ClientFilter implements Filter {
 				resp.sendError(HttpStatus.UNAUTHORIZED.value(), "invalid token - go to login");
 				return;
 			}
-		} 
-		
+		}
+
 		System.out.println(">>> FILTER - invalid token");
 		// if not valid
-		// throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not logged in - bad credentials or expired");
+		// throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "not logged in -
+		// bad credentials or expired");
 		resp.sendError(HttpStatus.UNAUTHORIZED.value(), "not logged in");
 	}
 

@@ -29,7 +29,6 @@ public class Application {
 		public FilterRegistrationBean<ClientFilter> clientFilter(JwtUtil jwtUtil) {
 			FilterRegistrationBean<ClientFilter> filterRegistrationBean = new FilterRegistrationBean<>();
 			ClientFilter clientFilter = new ClientFilter(jwtUtil);
-//			if (jwtUtil.extractClient(null))
 			filterRegistrationBean.setFilter(clientFilter);
 			filterRegistrationBean.addUrlPatterns("/api/*");
 			return filterRegistrationBean;

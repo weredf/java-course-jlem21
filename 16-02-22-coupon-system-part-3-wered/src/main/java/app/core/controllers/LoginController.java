@@ -3,6 +3,7 @@ package app.core.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,7 @@ public class LoginController {
 	private LoginManager loginManager;
 	
 	// also logout method here?
+//	@PutMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 	@PutMapping
 	public String login(@RequestParam String email, @RequestParam String password, @RequestParam ClientType clientType) throws CouponSystemException {
 		if(this.loginManager.login(email, password, clientType) != null) {
@@ -47,7 +49,7 @@ public class LoginController {
 				customerService = (CustomerService) loginManager.login(email, password, clientType);
 				client.setClientId(customerService.getCustomerDetails().getId());
 			}
-			System.out.println(client.getClientId());
+			System.out.println("Client id: " + client.getClientId());
 			return jwtUtil.generateToken(client);
 		} else {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "bad credentials");
