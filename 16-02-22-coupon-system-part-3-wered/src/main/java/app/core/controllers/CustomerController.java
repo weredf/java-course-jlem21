@@ -18,7 +18,6 @@ import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 import app.core.jwt.util.JwtUtil;
-import app.core.login.ClientType;
 import app.core.services.CustomerService;
 
 @RestController
@@ -30,6 +29,7 @@ public class CustomerController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
+	/*
 	// to do (id is not unique, email is!)
 	@PutMapping("/login")
 	public String login(@RequestHeader String token) {
@@ -40,10 +40,12 @@ public class CustomerController {
 			return "Wrong client type";
 		}
 	}
+	*/
 	
 	@PutMapping("/purchase-coupon/{couponId}")
 	public ResponseEntity<?> purchaseCoupon(@RequestParam int couponId, @RequestHeader String token) throws CouponSystemException {
 		try {
+			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
 			customerService.purchaseCoupon(couponId);
 			return ResponseEntity.ok("coupon id " + couponId + " purchased");
 		} catch (Exception e) {
@@ -54,6 +56,7 @@ public class CustomerController {
 	@GetMapping(path = "/get-customer-coupons", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(@RequestHeader String token) throws CouponSystemException {
 		try {
+			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
 			List<Coupon> coupons = customerService.getCustomerCoupons();
 			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 			return re;
@@ -65,6 +68,7 @@ public class CustomerController {
 	@GetMapping(path = "/get-customer-coupons/{category}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(Category category, @RequestHeader String token) throws CouponSystemException {
 		try {
+			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
 			List<Coupon> coupons = customerService.getCustomerCoupons(category);
 			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 			return re;
@@ -77,6 +81,7 @@ public class CustomerController {
 	@GetMapping(path = "/get-customer-coupons/{maxPrice}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(double maxPrice, @RequestHeader String token) throws CouponSystemException {
 		try {
+			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
 			List<Coupon> coupons = customerService.getCustomerCoupons(maxPrice);
 			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 			return re;
@@ -88,6 +93,7 @@ public class CustomerController {
 	@GetMapping(path = "/{customerId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerDetails(@RequestHeader String token) throws CouponSystemException{
 		try {
+			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
 			Customer customer = customerService.getCustomerDetails();
 			ResponseEntity<?> re = new ResponseEntity<>(customer, HttpStatus.OK);
 			return re;

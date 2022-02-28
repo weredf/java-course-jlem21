@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import app.core.entities.Category;
@@ -16,14 +15,17 @@ import lombok.Setter;
 
 @Service
 @Transactional
-@Scope("prototype")
+//@Scope("prototype")
 public class CompanyService extends ClientService{
 
 	@Setter
 	private int companyId;
 	
 	/**
-	 * Login to CompanyService
+	 * Check if company exists by email and password, sets companyId for usage in LoginManager, LoginController to put in token
+	 * @param email, password
+	 * @return boolean
+	 * @throws CouponSystemException
 	 */
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
@@ -43,7 +45,7 @@ public class CompanyService extends ClientService{
 	 * @return coupon id
 	 * @throws CouponSystemException
 	 */
-	public int addCoupon (Coupon coupon) throws CouponSystemException {
+	public int addCoupon (Coupon coupon ) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findByCompanyIdAndTitle(companyId, coupon.getTitle());
 		if (opt.isEmpty()) {
 			getCompanyDetails().addCoupon(coupon);

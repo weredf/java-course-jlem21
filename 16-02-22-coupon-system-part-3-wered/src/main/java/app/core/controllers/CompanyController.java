@@ -21,7 +21,6 @@ import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.exceptions.CouponSystemException;
 import app.core.jwt.util.JwtUtil;
-import app.core.login.ClientType;
 import app.core.services.CompanyService;
 
 @RestController
@@ -33,7 +32,7 @@ public class CompanyController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
-	
+	/*
 	// to do (id is not unique, email is!)
 	@PutMapping("/login")
 	public String login(@RequestHeader String token) {
@@ -44,10 +43,12 @@ public class CompanyController {
 			return "Wrong client type";
 		}
 	}
+	*/
 	
 	@PostMapping(value = "/add-coupon/{coupon}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> addCoupon(@RequestBody Coupon coupon, @RequestHeader String token) throws CouponSystemException {
 		try {
+			companyService.setCompanyId(jwtUtil.extractClient(token).getClientId());
 			int id = companyService.addCoupon(coupon);
 			return ResponseEntity.ok("coupon added, id: " + id); 
 		} catch (Exception e) {
@@ -58,6 +59,7 @@ public class CompanyController {
 	@PutMapping(value = "/update-coupon/{coupon}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> updateCoupon(@RequestBody Coupon coupon, @RequestHeader String token) throws CouponSystemException {
 		try {
+			companyService.setCompanyId(jwtUtil.extractClient(token).getClientId());
 			companyService.updateCoupon(coupon);
 			return ResponseEntity.ok("coupon updated: " + coupon);
 		} catch (Exception e) {
@@ -68,6 +70,7 @@ public class CompanyController {
 	@DeleteMapping("/{couponId}")
 	public ResponseEntity<?> deleteCoupon(@RequestParam int couponId, @RequestHeader String token) throws CouponSystemException {
 		try {
+			companyService.setCompanyId(jwtUtil.extractClient(token).getClientId());
 			companyService.deleteCoupon(couponId);
 			return ResponseEntity.ok("coupon deleted: " + couponId);
 		} catch (Exception e) {
@@ -78,6 +81,7 @@ public class CompanyController {
 	@GetMapping(path = "/get-company-coupons", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyCoupons(@RequestHeader String token) throws CouponSystemException {
 		try {
+			companyService.setCompanyId(jwtUtil.extractClient(token).getClientId());
 			List<Coupon> coupons = companyService.getCompanyCoupons();
 			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 			return re;
@@ -89,6 +93,7 @@ public class CompanyController {
 	@GetMapping(path = "/get-company-coupons/{category}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyCoupons(Category category, @RequestHeader String token) throws CouponSystemException {
 		try {
+			companyService.setCompanyId(jwtUtil.extractClient(token).getClientId());
 			List<Coupon> coupons = companyService.getCompanyCoupons(category);
 			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 			return re;
@@ -100,6 +105,7 @@ public class CompanyController {
 	@GetMapping(path = "/get-company-coupons/{maxPrice}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyCoupons(double maxPrice, @RequestHeader String token) throws CouponSystemException {
 		try {
+			companyService.setCompanyId(jwtUtil.extractClient(token).getClientId());
 			List<Coupon> coupons = companyService.getCompanyCoupons(maxPrice);
 			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 			return re;
@@ -111,6 +117,7 @@ public class CompanyController {
 	@GetMapping(path = "/{companyId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCompanyDetails(@RequestHeader String token) throws CouponSystemException{
 		try {
+			companyService.setCompanyId(jwtUtil.extractClient(token).getClientId());
 			Company company = companyService.getCompanyDetails();
 			ResponseEntity<?> re = new ResponseEntity<>(company, HttpStatus.OK);
 			return re;

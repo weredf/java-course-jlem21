@@ -22,6 +22,9 @@ public class ProductService {
 		if (this.productRepo.existsById(product.getId())) {
 			throw new ProductException("addProduct failed - already exists: " + product.getId());
 		}
+		if (this.productRepo.existsByName(product.getName())) {
+			throw new ProductException("addProduct failed - name already exists: " + product.getName());
+		}
 		return this.productRepo.save(product).getId();
 	}
 
