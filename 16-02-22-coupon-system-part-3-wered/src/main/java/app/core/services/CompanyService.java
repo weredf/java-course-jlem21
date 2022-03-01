@@ -11,15 +11,14 @@ import app.core.entities.Category;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.exceptions.CouponSystemException;
-import lombok.Setter;
 
 @Service
 @Transactional
 //@Scope("prototype")
 public class CompanyService extends ClientService{
 
-	@Setter
-	private int companyId;
+//	@Setter @Getter
+//	private int companyId;
 	
 	/**
 	 * Check if company exists by email and password, sets companyId for usage in LoginManager, LoginController to put in token
@@ -31,7 +30,7 @@ public class CompanyService extends ClientService{
 	public boolean login(String email, String password) throws CouponSystemException {
 		Optional<Company> opt = companyRepo.findByEmailAndPassword(email, password);
 		if (opt.isPresent()) {
-			this.companyId = opt.get().getId();
+//			this.companyId = opt.get().getId();
 			return true;
 		} else {
 			return false;
@@ -45,10 +44,10 @@ public class CompanyService extends ClientService{
 	 * @return coupon id
 	 * @throws CouponSystemException
 	 */
-	public int addCoupon (Coupon coupon ) throws CouponSystemException {
+	public int addCoupon (Coupon coupon, int companyId) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findByCompanyIdAndTitle(companyId, coupon.getTitle());
 		if (opt.isEmpty()) {
-			getCompanyDetails().addCoupon(coupon);
+			getCompanyDetails(companyId).addCoupon(coupon);
 			return couponRepo.save(coupon).getId();
 		} else {
 			throw new CouponSystemException("addCoupon failed - coupon title " + coupon.getTitle() + " already in use");
@@ -60,10 +59,11 @@ public class CompanyService extends ClientService{
 	 * @param coupon
 	 * @throws CouponSystemException
 	 */
-	public void updateCoupon (Coupon coupon) throws CouponSystemException {
+	public void updateCoupon (Coupon coupon, int companyId) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findById(coupon.getId());
 		if(opt.isPresent()) {
-			coupon.setCompany(getCompanyDetails());
+			// instead of set, check if coupon belongs to company?
+			coupon.setCompany(getCompanyDetails(companyId));
 			couponRepo.save(coupon);
 		} else {
 			throw new CouponSystemException("updateCoupon failed - coupon " + coupon.getId() + " doesn't exist");
@@ -75,9 +75,10 @@ public class CompanyService extends ClientService{
 	 * @param couponId
 	 * @throws CouponSystemException
 	 */
-	public void deleteCoupon (int couponId) throws CouponSystemException {
+	public void deleteCoupon (int couponId, int companyId) throws CouponSystemException {
 		Optional<Coupon> opt = couponRepo.findById(couponId);
 		if(opt.isPresent()) {
+			// check if coupon belongs to company
 			couponRepo.deleteById(couponId);
 		} else {
 			throw new CouponSystemException("deleteCoupon failed - coupon " + couponId + " doesn't exist");
@@ -89,8 +90,8 @@ public class CompanyService extends ClientService{
 	 * @return List of coupons
 	 * @throws CouponSystemException
 	 */
-	public List<Coupon> getCompanyCoupons() throws CouponSystemException {
-		List<Coupon> coupons = couponRepo.findByCompany(getCompanyDetails());
+	public List<Coupon> getCompanyCoupons(int companyId) throws CouponSystemException {
+		List<Coupon> coupons = couponRepo.findByCompany(getCompanyDetails(companyId));
 		return coupons;
 		
 	}
@@ -101,8 +102,8 @@ public class CompanyService extends ClientService{
 	 * @return List of coupons
 	 * @throws CouponSystemException
 	 */
-	public List<Coupon> getCompanyCoupons(Category category) throws CouponSystemException {
-		List<Coupon> coupons = couponRepo.findByCompanyAndCategory(getCompanyDetails(), category);
+	public List<Coupon> getCompanyCoupons(Category category, int companyId) throws CouponSystemException {
+		List<Coupon> coupons = couponRepo.findByCompanyAndCategory(getCompanyDetails(companyId), category);
 		return coupons;
 	}
 
@@ -112,8 +113,8 @@ public class CompanyService extends ClientService{
 	 * @return List of coupons
 	 * @throws CouponSystemException
 	 */
-	public List<Coupon> getCompanyCoupons(double maxPrice) throws CouponSystemException {
-		List<Coupon> coupons = couponRepo.findByPriceLessThanEqualAndCompany(maxPrice, getCompanyDetails());
+	public List<Coupon> getCompanyCoupons(double maxPrice, int companyId) throws CouponSystemException {
+		List<Coupon> coupons = couponRepo.findByPriceLessThanEqualAndCompany(maxPrice, getCompanyDetails(companyId));
 		return coupons;
 	}
 	
@@ -122,7 +123,7 @@ public class CompanyService extends ClientService{
 	 * @return company
 	 * @throws CouponSystemException
 	 */
-	public Company getCompanyDetails() throws CouponSystemException {
+	public Company getCompanyDetails(int companyId) throws CouponSystemException {
 		return companyRepo.findById(companyId).get();
 	}
 }

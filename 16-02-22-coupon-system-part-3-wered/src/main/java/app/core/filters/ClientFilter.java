@@ -25,6 +25,7 @@ public class ClientFilter implements Filter {
 		this.jwtUtil = jwtUtil;
 	}
 
+	// to do - add preflight and fix catch reponse
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -33,31 +34,38 @@ public class ClientFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String token = req.getHeader("token"); // can be shortened
+		System.out.println("===== LOGIN FILTER TOKEN: " + token);
 		String uri = req.getRequestURI();
 		ClientType client = jwtUtil.extractClient(token).getClientType();
 		System.out.println("======================================");
 		System.out.println(uri);
 		System.out.println("======================================");
-		if (token != null) {
-			try {
-				// check token validity
-				// if valid forward the request to the end point
-				if (!jwtUtil.isTokenExpired(token)) {
-					System.out.println(">>> FILTER - valid token");
-					if (uri.contains(client.toString())) {
-						chain.doFilter(request, response);
-						return;
-					} else {
-						System.out.println(">>> FILTER - wrong client type");
-						resp.sendError(HttpStatus.UNAUTHORIZED.value(), "wrong client type - go to login");
-						return;
-					}
+		// browser check - preflight (doesn't happen with Swagger)
+		if (token == null && req.getMethod().equals("OPTIONS")) {
+			System.out.println("this is a preflight request: " + req.getMethod());
+			chain.doFilter(request, response); // go ahead with preflight and return
+			return;
+		}
+
+		try {
+			// check token validity
+			// if valid forward the request to the end point
+			if (!jwtUtil.isTokenExpired(token)) {
+				System.out.println(">>> FILTER - valid token");
+				if (uri.contains(client.toString())) {
+					chain.doFilter(request, response);
+					return;
+				} else {
+					System.out.println(">>> FILTER - wrong client type");
+					resp.sendError(HttpStatus.UNAUTHORIZED.value(), "wrong client type - go to login");
+					return;
 				}
-			} catch (Exception e) {
-				System.out.println(">>> FILTER - invalid token, expired");
-				resp.sendError(HttpStatus.UNAUTHORIZED.value(), "invalid token - go to login");
-				return;
 			}
+		} catch (Exception e) {
+			System.out.println(">>> FILTER - invalid token, expired");
+			resp.setHeader("Access-Control-Allow-Origin", "*");
+			resp.sendError(HttpStatus.UNAUTHORIZED.value(), "invalid token - go to login");
+			return;
 		}
 
 		System.out.println(">>> FILTER - invalid token");
@@ -66,7 +74,7 @@ public class ClientFilter implements Filter {
 		// bad credentials or expired");
 		resp.sendError(HttpStatus.UNAUTHORIZED.value(), "not logged in - bad credentials or expired");
 		return;
-		
+
 	}
 
 }

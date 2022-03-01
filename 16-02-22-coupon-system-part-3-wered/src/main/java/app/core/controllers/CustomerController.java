@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -20,6 +21,7 @@ import app.core.exceptions.CouponSystemException;
 import app.core.jwt.util.JwtUtil;
 import app.core.services.CustomerService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/CUSTOMER")
 public class CustomerController {
@@ -45,8 +47,8 @@ public class CustomerController {
 	@PutMapping("/purchase-coupon/{couponId}")
 	public ResponseEntity<?> purchaseCoupon(@RequestParam int couponId, @RequestHeader String token) throws CouponSystemException {
 		try {
-			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
-			customerService.purchaseCoupon(couponId);
+			int customerId = jwtUtil.extractClient(token).getClientId();
+			customerService.purchaseCoupon(couponId, customerId);
 			return ResponseEntity.ok("coupon id " + couponId + " purchased");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(e.getMessage());
@@ -56,8 +58,8 @@ public class CustomerController {
 	@GetMapping(path = "/get-customer-coupons", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(@RequestHeader String token) throws CouponSystemException {
 		try {
-			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
-			List<Coupon> coupons = customerService.getCustomerCoupons();
+			int customerId = jwtUtil.extractClient(token).getClientId();
+			List<Coupon> coupons = customerService.getCustomerCoupons(customerId);
 			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 			return re;
 		} catch (Exception e) {
@@ -68,8 +70,8 @@ public class CustomerController {
 	@GetMapping(path = "/get-customer-coupons/{category}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(Category category, @RequestHeader String token) throws CouponSystemException {
 		try {
-			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
-			List<Coupon> coupons = customerService.getCustomerCoupons(category);
+			int customerId = jwtUtil.extractClient(token).getClientId();
+			List<Coupon> coupons = customerService.getCustomerCoupons(category, customerId);
 			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 			return re;
 		} catch (Exception e) {
@@ -81,8 +83,8 @@ public class CustomerController {
 	@GetMapping(path = "/get-customer-coupons/{maxPrice}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerCoupons(double maxPrice, @RequestHeader String token) throws CouponSystemException {
 		try {
-			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
-			List<Coupon> coupons = customerService.getCustomerCoupons(maxPrice);
+			int customerId = jwtUtil.extractClient(token).getClientId();
+			List<Coupon> coupons = customerService.getCustomerCoupons(maxPrice, customerId);
 			ResponseEntity<?> re = new ResponseEntity<>(coupons, HttpStatus.OK);
 			return re;
 		} catch (Exception e) {
@@ -93,8 +95,8 @@ public class CustomerController {
 	@GetMapping(path = "/{customerId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<?> getCustomerDetails(@RequestHeader String token) throws CouponSystemException{
 		try {
-			customerService.setCustomerId(jwtUtil.extractClient(token).getClientId());
-			Customer customer = customerService.getCustomerDetails();
+			int customerId = jwtUtil.extractClient(token).getClientId();
+			Customer customer = customerService.getCustomerDetails(customerId);
 			ResponseEntity<?> re = new ResponseEntity<>(customer, HttpStatus.OK);
 			return re;
 		} catch (Exception e) {

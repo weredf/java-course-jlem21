@@ -1,7 +1,10 @@
 package app.core.repos;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import app.core.entities.Company;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 
@@ -32,5 +35,7 @@ public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 	 * @throws CouponSystemException
 	 */
 	Customer getByEmailAndPassword(String email, String password) throws CouponSystemException;
+
+	Optional<Company> findByEmailAndPassword(String email, String password) throws CouponSystemException;
 
 }

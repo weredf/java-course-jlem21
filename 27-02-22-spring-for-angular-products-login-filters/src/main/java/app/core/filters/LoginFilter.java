@@ -33,19 +33,22 @@ public class LoginFilter implements Filter {
 		String token = req.getHeader("token");
 		System.out.println("===== LOGIN FILTER TOKEN: " + token);
 
+		// browser check - preflight (doesn't happen with Swagger)
 		if (token == null && req.getMethod().equals("OPTIONS")) {
-			System.out.println("this is preflight request: " + req.getMethod());
-			chain.doFilter(request, response);
+			System.out.println("this is a preflight request: " + req.getMethod());
+			chain.doFilter(request, response); // go ahead with preflight and return
 			return;
 		}
 
 		try {
 			ClientDetails clientDetails = jwtUtil.extractClient(token);
 			System.out.println("===== LOGIN FILTER: " + clientDetails);
-			chain.doFilter(request, response);
+			chain.doFilter(request, response); // go to resource
 			return;
 		} catch (Exception e) {
+			// if we are here token is expired
 			e.printStackTrace();
+			// send an error response to caller
 			resp.setHeader("Access-Control-Allow-Origin", "*");
 			resp.sendError(HttpStatus.UNAUTHORIZED.value(), "not logged in");
 		}

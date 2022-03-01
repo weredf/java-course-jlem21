@@ -11,15 +11,14 @@ import app.core.entities.Category;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
-import lombok.Setter;
 
 @Service
 @Transactional
 //@Scope("prototype")
 public class CustomerService extends ClientService{
 
-	@Setter
-	private int customerId;
+//	@Setter @Getter
+//	private int customerId;
 	
 	/**
 	 * Check if company exists by email and password, sets customerId for usage in LoginManager, LoginController to put in token
@@ -30,7 +29,7 @@ public class CustomerService extends ClientService{
 	@Override
 	public boolean login(String email, String password) throws CouponSystemException {
 		if (customerRepo.existsByEmailAndPassword(email, password)) {
-			this.customerId = customerRepo.getByEmailAndPassword(email, password).getId();
+//			this.customerId = customerRepo.getByEmailAndPassword(email, password).getId();
 			return true;
 		} else {
 			return false;
@@ -44,7 +43,7 @@ public class CustomerService extends ClientService{
 	 * @param coupon
 	 * @throws CouponSystemException
 	 */
-	public void purchaseCoupon(int couponId) throws CouponSystemException {
+	public void purchaseCoupon(int couponId, int customerId) throws CouponSystemException {
 		Optional<Coupon> opt1 = couponRepo.findByIdAndCustomersId(couponId, customerId);
 		if(opt1.isEmpty()) {
 			Optional<Coupon> opt2 = couponRepo.findById(couponId);
@@ -52,7 +51,7 @@ public class CustomerService extends ClientService{
 				Coupon coupon = opt2.get();
 				int amount = coupon.getAmount();
 				if(amount > 0) {
-					getCustomerDetails().addCoupon(coupon);
+					getCustomerDetails(customerId).addCoupon(coupon);
 					coupon.setAmount(amount-1);
 				} else throw new CouponSystemException("purchaseCoupon failed - coupon amount finished");
 			} else throw new CouponSystemException("purchaseCoupon failed - coupon with id " + couponId + " doesn't exist");
@@ -66,7 +65,7 @@ public class CustomerService extends ClientService{
 	 * @return List of coupons
 	 * @throws CouponSystemException
 	 */
-	public List<Coupon> getCustomerCoupons() throws CouponSystemException {
+	public List<Coupon> getCustomerCoupons(int customerId) throws CouponSystemException {
 		List<Coupon> coupons = couponRepo.findByCustomersId(customerId);
 		return coupons;
 		
@@ -78,7 +77,7 @@ public class CustomerService extends ClientService{
 	 * @return List of coupons
 	 * @throws CouponSystemException
 	 */
-	public List<Coupon> getCustomerCoupons(Category category) throws CouponSystemException {
+	public List<Coupon> getCustomerCoupons(Category category, int customerId) throws CouponSystemException {
 		List<Coupon> coupons = couponRepo.findByCategoryAndCustomersId(category, customerId);
 		return coupons;
 		
@@ -90,7 +89,7 @@ public class CustomerService extends ClientService{
 	 * @return List of coupons
 	 * @throws CouponSystemException
 	 */
-	public List<Coupon> getCustomerCoupons(double maxPrice) throws CouponSystemException {
+	public List<Coupon> getCustomerCoupons(double maxPrice, int customerId) throws CouponSystemException {
 		List<Coupon> coupons = couponRepo.findByPriceLessThanEqualAndCustomersId(maxPrice, customerId);
 		return coupons;
 		
@@ -101,7 +100,7 @@ public class CustomerService extends ClientService{
 	 * @return customer
 	 * @throws CouponSystemException
 	 */
-	public Customer getCustomerDetails() throws CouponSystemException {
+	public Customer getCustomerDetails(int customerId) throws CouponSystemException {
 		Customer customer = customerRepo.findById(customerId).get();
 		return customer;
 	}
